@@ -5,12 +5,12 @@ import java.util.List;
 public class Grupo {
     private String nombre;
     private String fotoPerfil;
-    private String liderGrupo;
+    private Usuario liderGrupo;
     private List<Usuario> participantes;
 
 
     // Constructor
-    public Grupo(String nombre, String fotoPerfil, String liderGrupo) {
+    public Grupo(String nombre, String fotoPerfil, Usuario liderGrupo) {
         this.nombre = nombre;
         this.fotoPerfil = fotoPerfil;
         this.liderGrupo = liderGrupo;
@@ -60,11 +60,11 @@ public class Grupo {
         this.fotoPerfil = fotoPerfil;
     }
 
-    public String getLiderGrupo() {
+    public Usuario getLiderGrupo() {
         return liderGrupo;
     }
 
-    private void setLiderGrupo(String liderGrupo) {
+    private void setLiderGrupo(Usuario liderGrupo) {
         this.liderGrupo = liderGrupo;
     }
 
