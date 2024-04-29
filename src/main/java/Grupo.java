@@ -109,7 +109,7 @@ public class Grupo {
                // Agregar la transacción a la lista de transacciones mínimas
                transacciones.add(deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos());
                this.transaccion.put(deudor,acreedor);
-               deudor.getMensajes().add(transaccion);
+               deudor.setMensajes(transacciones);
            }
 
            // Imprimir las transacciones mínimas

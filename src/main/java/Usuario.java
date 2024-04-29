@@ -86,7 +86,9 @@ public class Usuario {
     }
     
     public void setMensajes(List<String> mensajes){
-    	this.mensajes=mensajes;
+    	for(String m:mensajes) {
+    		this.mensajes.add(m);
+    	}
     }
     
     
