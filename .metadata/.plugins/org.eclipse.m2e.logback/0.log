@@ -1,0 +1,12 @@
+2024-04-22 17:56:18,666 [Worker-7: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2024-04-22 18:00:47,480 [Worker-21: Importing Maven projects] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: es.usc:ReparteGrp23:0.0.1-SNAPSHOT @ C:\Users\lucia\Downloads\ReparteGrp23-main\ReparteGrp23-main\pom.xml.
+2024-04-22 18:00:48,960 [Worker-21: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /ReparteGrp23/src/main/java
+2024-04-22 18:00:48,971 [Worker-21: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /ReparteGrp23/src/main/resources
+2024-04-22 18:00:48,974 [Worker-21: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /ReparteGrp23/src/test/java
+2024-04-22 18:00:48,976 [Worker-21: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /ReparteGrp23/src/test/resources
+2024-04-22 18:00:49,172 [Worker-21: Importing Maven projects] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Imported and configured 1 project(s) in 3 sec
+2024-04-22 18:00:50,726 [Worker-21: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2024-04-22 18:00:50,729 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\lucia\Downloads\ReparteGrp23-main\ReparteGrp23-main\src\main\resources
+2024-04-22 18:00:50,739 [Worker-21: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2024-04-22 18:00:50,742 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\lucia\Downloads\ReparteGrp23-main\ReparteGrp23-main\src\test\resources
+2024-04-22 18:01:55,767 [Worker-7: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
