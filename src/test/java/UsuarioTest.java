@@ -38,4 +38,24 @@ public class UsuarioTest {
             new Usuario("Nombre Apellidos", "correo@example.com", "+1234ABC6789", "password", "1234567890123456");
         });
     }
+    
+    @Test
+    public void testConstructor_ValoresNulos() {
+        // Intentamos crear un usuario con valores nulos
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario(null, "correo@example.com", "+123456789", "password", "1234567890123456");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Nombre Apellidos", null, "+123456789", "password", "1234567890123456");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Nombre Apellidos", "correo@example.com", null, "password", "1234567890123456");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Nombre Apellidos", "correo@example.com", "+123456789", null, "1234567890123456");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Nombre Apellidos", "correo@example.com", "+123456789", "password", null);
+        });
+    }
 }

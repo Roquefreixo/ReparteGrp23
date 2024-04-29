@@ -11,18 +11,24 @@ public class Usuario {
 
     // Constructor
     public Usuario(String nombreApellidos, String correoElectronico, String numeroTelefono, String contraseña, String numeroCuentaBancaria) {
-        this.nombreApellidos = nombreApellidos;
-        this.correoElectronico = correoElectronico;
+        if (nombreApellidos == null || correoElectronico == null || numeroTelefono == null || contraseña == null || numeroCuentaBancaria == null) {
+            throw new IllegalArgumentException("Ningún parámetro puede ser nulo.");
+        }
+        
         // Verificar si la contraseña es igual al nombre y/o apellidos
         if (contraseña.equals(nombreApellidos)) {
             throw new IllegalArgumentException("La contraseña no puede ser igual al nombre y/o apellidos del usuario.");
         }
-        this.contraseña = contraseña;
+        
         // Verificar si el número de teléfono contiene caracteres, excluyendo el "+"
         if (!numeroTelefono.matches("^\\+[0-9]+$")) {
             throw new IllegalArgumentException("El número de teléfono debe contener solo dígitos después del signo de más (+).");
         }
+        
+        this.nombreApellidos = nombreApellidos;
+        this.correoElectronico = correoElectronico;
         this.numeroTelefono = numeroTelefono;
+        this.contraseña = contraseña;
         this.numeroCuentaBancaria = numeroCuentaBancaria;
     }
 
