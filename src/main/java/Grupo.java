@@ -10,6 +10,7 @@ public class Grupo {
     private Usuario liderGrupo;
     private List<Usuario> participantes;
     private Map<Usuario, Double> montos;
+    private Map<Usuario, Usuario> transaccion;//primer usuario le debe al segundo
     private List<Gastos> gastos;
 
     // Constructor
@@ -23,6 +24,7 @@ public class Grupo {
         this.liderGrupo = liderGrupo;
         this.participantes = new ArrayList<>();
         this.montos = new HashMap<>();
+        this.transaccion=new HashMap<>();
         // Inicializar montos para cada participante con 0
         for (Usuario participante : participantes) {
             this.montos.put(participante, 0.0);
@@ -106,6 +108,8 @@ public class Grupo {
 
                // Agregar la transacción a la lista de transacciones mínimas
                transacciones.add(deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos());
+               this.transaccion.put(deudor,acreedor);
+               deudor.getMensajes().add(transaccion);
            }
 
            // Imprimir las transacciones mínimas

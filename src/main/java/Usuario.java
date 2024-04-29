@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Usuario {
@@ -9,6 +11,7 @@ public class Usuario {
     private String numeroCuentaBancaria;
     private Date fechaCreacion;
     private Date fechaExpiracion;
+    private List<String> mensajes;
 
     // Constructor
     public Usuario(String nombreApellidos, String correoElectronico, String numeroTelefono, String contraseña, String numeroCuentaBancaria) {
@@ -31,6 +34,7 @@ public class Usuario {
         this.numeroTelefono = numeroTelefono;
         this.contraseña = contraseña;
         this.numeroCuentaBancaria = numeroCuentaBancaria;
+        this.mensajes=new ArrayList<>();
     }
 
     // Métodos para obtener y establecer los valores de los atributos
@@ -73,6 +77,24 @@ public class Usuario {
 
     void setNumeroCuentaBancaria(String numeroCuentaBancaria) {
         this.numeroCuentaBancaria = numeroCuentaBancaria;
+    }
+    
+    
+    
+    public List<String> getMensajes(){
+    	return mensajes;
+    }
+    
+    public void setMensajes(List<String> mensajes){
+    	this.mensajes=mensajes;
+    }
+    
+    
+    // Método para imprimir los mensajes
+    public void imprimirMensajes() {
+        for (String mensaje : mensajes) {
+            System.out.println(mensaje);
+        }
     }
     
     @Override
