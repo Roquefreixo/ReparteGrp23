@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.Objects;
 
 public class Usuario {
     private String nombreApellidos;
@@ -38,7 +39,7 @@ public class Usuario {
         return nombreApellidos;
     }
 
-    private void setNombreApellidos(String nombreApellidos) {
+    void setNombreApellidos(String nombreApellidos) {
         this.nombreApellidos = nombreApellidos;
     }
 
@@ -46,7 +47,7 @@ public class Usuario {
         return correoElectronico;
     }
 
-    private void setCorreoElectronico(String correoElectronico) {
+    void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
     }
 
@@ -54,7 +55,7 @@ public class Usuario {
         return numeroTelefono;
     }
 
-    private void setNumeroTelefono(String numeroTelefono) {
+    void setNumeroTelefono(String numeroTelefono) {
         this.numeroTelefono = numeroTelefono;
     }
 
@@ -62,7 +63,7 @@ public class Usuario {
         return contraseña;
     }
 
-    private void setContraseña(String contraseña) {
+    void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
 
@@ -70,8 +71,22 @@ public class Usuario {
         return numeroCuentaBancaria;
     }
 
-    private void setNumeroCuentaBancaria(String numeroCuentaBancaria) {
+    void setNumeroCuentaBancaria(String numeroCuentaBancaria) {
         this.numeroCuentaBancaria = numeroCuentaBancaria;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Usuario usuario = (Usuario) obj;
+        return Objects.equals(nombreApellidos, usuario.nombreApellidos) && Objects.equals(correoElectronico, usuario.correoElectronico) && Objects.equals(numeroTelefono, usuario.numeroTelefono) && Objects.equals(contraseña, usuario.contraseña) && Objects.equals(numeroCuentaBancaria, usuario.numeroCuentaBancaria);
+    }
+
+
 
 }

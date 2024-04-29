@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class Grupo {
     private String nombre;
     private String fotoPerfil;
@@ -50,7 +51,7 @@ public class Grupo {
     public String getNombre() {
         return nombre;
     }
-
+    
     private void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -78,5 +79,6 @@ public class Grupo {
     private void setParticipantes(List<Usuario> participantes) {
         this.participantes = participantes;
     }
+    
 
 }
