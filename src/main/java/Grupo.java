@@ -8,9 +8,12 @@ public class Grupo {
     private Usuario liderGrupo;
     private List<Usuario> participantes;
 
-
     // Constructor
     public Grupo(String nombre, String fotoPerfil, Usuario liderGrupo) {
+        if (nombre == null || fotoPerfil == null || liderGrupo == null) {
+            throw new IllegalArgumentException("El nombre, la foto de perfil y el líder del grupo no pueden ser nulos.");
+        }
+
         this.nombre = nombre;
         this.fotoPerfil = fotoPerfil;
         this.liderGrupo = liderGrupo;
