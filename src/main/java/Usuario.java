@@ -94,6 +94,10 @@ public class Usuario {
     
     // Método para imprimir los mensajes
     public void imprimirMensajes() {
+    	if (mensajes.isEmpty()) {
+            System.out.println("No hay mensajes para imprimir");
+            return;
+        }
         for (String mensaje : mensajes) {
             System.out.println(mensaje);
         }
