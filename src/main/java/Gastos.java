@@ -33,11 +33,8 @@ public class Gastos{
     public void calcularHaberesDeberes(Map<Usuario, Double> montosUsuarios) {
         double montoPorUsuario = monto / listaDeUsuariosPagadores.size();
         for (Usuario usuario : listaDeUsuariosPagadores) {
-            if (usuario.equals(usuarioQueHaPagado)) {
-                montosUsuarios.put(usuario, montosUsuarios.getOrDefault(usuario, 0.0) + montoPorUsuario);
-            } else {
-                montosUsuarios.put(usuario, montosUsuarios.getOrDefault(usuario, 0.0) - montoPorUsuario);
-            }
+            montosUsuarios.put(usuario, montosUsuarios.getOrDefault(usuario, 0.0) - montoPorUsuario);
+            
         }
     }
     

@@ -1,5 +1,10 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class UsuarioTest {
@@ -64,6 +69,27 @@ public class UsuarioTest {
         assertEquals("newpassword", usuario.getContraseña());
         assertEquals("9876543210987654", usuario.getNumeroCuentaBancaria());
     }
+    
+    @Test
+    void testGetMensajes() {
+        // Crear un usuario de prueba
+        Usuario usuario = new Usuario("Nombre Apellido", "correo@example.com", "+123456789", "password", "1234567890123456");
+
+        // Crear una lista de mensajes de prueba
+        List<String> mensajes = new ArrayList<>();
+        mensajes.add("Mensaje 1");
+        mensajes.add("Mensaje 2");
+        mensajes.add("Mensaje 3");
+
+        // Establecer los mensajes en el usuario
+        usuario.setMensajes(mensajes);
+
+        // Obtener los mensajes usando getMensajes()
+        List<String> mensajesObtenidos = usuario.getMensajes();
+
+        // Verificar que los mensajes obtenidos son los mismos que los establecidos
+        assertEquals(mensajes, mensajesObtenidos);
+    }
     @Test
     public void testEquals_SameObject() {
         Usuario usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456");
@@ -95,4 +121,35 @@ public class UsuarioTest {
         Usuario usuario2 = new Usuario("María García", "maria@example.com", "+987654321", "newpassword", "9876543210987654");
         assertFalse(usuario1.equals(usuario2)); // Comprobando dos objetos con diferentes atributos
     }
+    
+    
+
+    @Test
+    void testImprimirMensajes() {
+        // Crear un usuario de prueba
+        Usuario usuario = new Usuario("Nombre Apellido", "correo@example.com", "+123456789", "password", "1234567890123456");
+
+        // Crear una lista de mensajes de prueba
+        List<String> mensajes = new ArrayList<>();
+        mensajes.add("Mensaje 1");
+        mensajes.add("Mensaje 2");
+        mensajes.add("Mensaje 3");
+
+        // Establecer los mensajes en el usuario
+        usuario.setMensajes(mensajes);
+
+        // Redirigir la salida estándar a un ByteArrayOutputStream
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        // Llamar al método imprimirMensajes
+        usuario.imprimirMensajes();
+
+        // Verificar que la salida contiene los mensajes de prueba
+        String printedOutput = outContent.toString();
+        assertTrue(printedOutput.contains("Mensaje 1"));
+        assertTrue(printedOutput.contains("Mensaje 2"));
+        assertTrue(printedOutput.contains("Mensaje 3"));
+    }
+
 }

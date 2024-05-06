@@ -35,6 +35,7 @@ public class Grupo {
             this.montos.put(participante, 0.0);
         }
 
+        this.gastos=new ArrayList<>();
     }
 
 
@@ -69,62 +70,87 @@ public class Grupo {
     
     
     // Método para añadir un gasto
-       public void añadirGasto(Grupo grupo, Usuario usuarioQueHaPagado, List<Usuario> listaDeUsuariosPagadores,
-               double monto, String descripcion, Date fecha, String actividad) {
-           Gastos gasto = new Gastos(grupo, usuarioQueHaPagado, listaDeUsuariosPagadores, monto, descripcion, fecha, actividad);
-           gasto.calcularHaberesDeberes(this.montos);
-           gastos.add(gasto);
+    public void añadirGasto(Grupo grupo, Usuario usuarioQueHaPagado, List<Usuario> listaDeUsuariosPagadores,
+            double monto, String descripcion, Date fecha, String actividad) {
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto del gasto debe ser mayor que 0.");
+        }
+
+        if (usuarioQueHaPagado == null) {
+            throw new IllegalArgumentException("El usuario que ha pagado el gasto no puede ser nulo.");
+        }
+        if (listaDeUsuariosPagadores.isEmpty()) {
+            throw new IllegalArgumentException("La lista de usuarios pagadores no puede estar vacía.");
+        }
+        for (Usuario deudor : listaDeUsuariosPagadores) {
+            if (!grupo.getParticipantes().contains(deudor)) {
+                throw new IllegalArgumentException("Los deudores especificados no están en el grupo.");
+            }
+        }
+        Gastos gasto = new Gastos(grupo, usuarioQueHaPagado, listaDeUsuariosPagadores, monto, descripcion, fecha, actividad);
+        gastos.add(gasto);
+
         // Imprimir las deudas o haberes de cada usuario
-           System.out.println("Deudas/Haberes de cada usuario:");
-           calcularTransaccionesMinimas();
-           /*for (Map.Entry<Usuario, Double> entry : montos.entrySet()) {
-               Usuario usuario = entry.getKey();
-               Double deudaHaber = entry.getValue();
-               System.out.println(usuario.getNombreApellidos() + ": " + deudaHaber);
-           }*/
-       }
+        System.out.println("Deudas/Haberes de cada usuario:");
+        calcularTransaccionesMinimas();
+    }
+
        
        // Función para calcular transacciones mínimas
        public void calcularTransaccionesMinimas() {
-           List<String> transacciones = new ArrayList<>();
-           List<Usuario> participantes = new ArrayList<>(montos.keySet());
-           // Mientras haya deudas pendientes
-           while (!todosLosMontosSonCero(montos)) {
-               // Encontrar el deudor y el acreedor con la mayor deuda y el mayor haber
-               Usuario deudor = null;
-               Usuario acreedor = null;
-               double maxDeuda = Double.MIN_VALUE;
-               double maxHaber = Double.MIN_VALUE;
-               for (Usuario participante : participantes) {
-                   double monto = montos.get(participante);
-                   if (monto < 0 && monto < maxDeuda) {
-                       deudor = participante;
-                       maxDeuda = monto;
-                   } else if (monto > 0 && monto > maxHaber) {
-                       acreedor = participante;
-                       maxHaber = monto;
-                   }
-               }
+    	    List<String> transacciones = new ArrayList<>();
+    	    List<Usuario> participantes = new ArrayList<>(montos.keySet());
+    	    
+    	    // Iterar sobre los gastos
+    	    for (Gastos gasto : gastos) {
+    	        // Calcular el monto a pagar por cada participante del gasto
+    	        double montoPorUsuario = gasto.getMonto() / gasto.getListaDeUsuariosPagadores().size();
+    	        for (Usuario usuario : gasto.getListaDeUsuariosPagadores()) {
+    	            if (usuario.equals(gasto.getUsuarioQueHaPagado())) {
+    	                montos.put(usuario, montos.getOrDefault(usuario, 0.0) + montoPorUsuario);
+    	            } else {
+    	                montos.put(usuario, montos.getOrDefault(usuario, 0.0) - montoPorUsuario);
+    	            }
+    	        }
+    	    }
+    	    
+    	    // Mientras haya deudas pendientes
+    	    while (!todosLosMontosSonCero(montos)) {
+    	        // Encontrar el deudor y el acreedor con la mayor deuda y el mayor haber
+    	        Usuario deudor = null;
+    	        Usuario acreedor = null;
+    	        double maxDeuda = Double.MIN_VALUE;
+    	        double maxHaber = Double.MIN_VALUE;
+    	        for (Usuario participante : participantes) {
+    	            double monto = montos.get(participante);
+    	            if (monto < 0 && monto < maxDeuda) {
+    	                deudor = participante;
+    	                maxDeuda = monto;
+    	            } else if (monto > 0 && monto > maxHaber) {
+    	                acreedor = participante;
+    	                maxHaber = monto;
+    	            }
+    	        }
 
-               // Realizar la transacción entre el deudor y el acreedor
-               double transaccion = Math.min(-maxDeuda, maxHaber);
-               montos.put(deudor, montos.get(deudor) + transaccion);
-               montos.put(acreedor, montos.get(acreedor) - transaccion);
+    	        // Realizar la transacción entre el deudor y el acreedor
+    	        double transaccion = Math.min(-maxDeuda, maxHaber);
+    	        montos.put(deudor, montos.get(deudor) + transaccion);
+    	        montos.put(acreedor, montos.get(acreedor) - transaccion);
 
-               // Agregar la transacción a la lista de transacciones mínimas
-               transacciones.add(deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos());
-               this.transaccion.put(deudor,acreedor);
-               deudor.setMensajes(transacciones);
-           }
+    	        // Agregar la transacción a la lista de transacciones mínimas
+    	        transacciones.add(deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos());
+    	        this.transaccion.put(deudor, acreedor);
+    	        deudor.setMensajes(transacciones);
+    	    }
 
-           // Imprimir las transacciones mínimas
-           for (String transaccion : transacciones) {
-               System.out.println(transaccion);
-           }
-       }
+    	    // Imprimir las transacciones mínimas
+    	    for (String transaccion : transacciones) {
+    	        System.out.println(transaccion);
+    	    }
+    	}
 
        // Función auxiliar para verificar si todos los montos en el mapa son cero
-       private boolean todosLosMontosSonCero(Map<Usuario, Double> montos) {
+       public boolean todosLosMontosSonCero(Map<Usuario, Double> montos) {
            for (double monto : montos.values()) {
                if (monto != 0.0) {
                    return false;
@@ -165,7 +191,17 @@ public class Grupo {
         return participantes;
     }
 
-    
+    public Map<Usuario, Double> getMontos() {
+    	return montos;
+    }
+
+
+	public List<Gastos> getGastos() {
+		return gastos;
+	}
+
+
+	
     
 
 }

@@ -5,8 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List; 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map; 
 
 
 class GrupoTest {
@@ -156,6 +160,8 @@ class GrupoTest {
         assertEquals("foto.jpg", grupo.getFotoPerfil());
         assertEquals(liderGrupo, grupo.getLiderGrupo());
         assertEquals(participantes, grupo.getParticipantes());
+        assertNotNull(grupo.getMontos());
+        assertNotNull(grupo.getGastos());
 
         // Modificar los valores con los setters
         grupo.setNombre("Nuevo Nombre de Grupo");
@@ -165,4 +171,164 @@ class GrupoTest {
         assertEquals("Nuevo Nombre de Grupo", grupo.getNombre());
         assertEquals("nueva_foto.jpg", grupo.getFotoPerfil());
     }
+    
+    @Test
+    public void testAñadirGastoValido() {
+        // Crear usuarios y grupo reales para el test
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario usuarioQueHaPagado = new Usuario("Usuario Pagador", "pagador@example.com", "+987654321", "password", "9876543210987654");
+        List<Usuario> listaDeUsuariosPagadores = new ArrayList<>();
+        listaDeUsuariosPagadores.add(liderGrupo);
+        listaDeUsuariosPagadores.add(usuarioQueHaPagado);
+
+        // Crear el grupo
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", liderGrupo, listaDeUsuariosPagadores);
+
+        // Llamar al método a probar
+        double monto = 100.0;
+        String descripcion = "Descripción del gasto";
+        Date fecha = new Date();
+        String actividad = "Actividad relacionada";
+        grupo.añadirGasto(grupo, usuarioQueHaPagado, listaDeUsuariosPagadores, monto, descripcion, fecha, actividad);
+
+        // Verificar que el gasto se ha agregado correctamente
+        List<Gastos> gastos = grupo.getGastos();
+        assertEquals(1, gastos.size());
+
+        // Verificar que el monto del gasto se haya reflejado en el grupo
+        Map<Usuario, Double> montos = grupo.getMontos();
+        assertEquals(monto, montos.get(usuarioQueHaPagado));
+    }
+
+    
+    @Test
+    public void testTodosLosMontosSonCero() {
+        // Crear un mapa con montos todos iguales a cero
+        Map<Usuario, Double> montosCero = new HashMap<>();
+        montosCero.put(mock(Usuario.class), 0.0);
+        montosCero.put(mock(Usuario.class), 0.0);
+        montosCero.put(mock(Usuario.class), 0.0);
+
+        // Crear un mapa con al menos un monto diferente de cero
+        Map<Usuario, Double> montosNoCero = new HashMap<>();
+        montosNoCero.put(mock(Usuario.class), 0.0);
+        montosNoCero.put(mock(Usuario.class), 50.0);
+        montosNoCero.put(mock(Usuario.class), 0.0);
+
+        // Instanciar el objeto Grupo y probar el método todosLosMontosSonCero con ambos mapas
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", mock(Usuario.class), new ArrayList<>());
+        assertTrue(grupo.todosLosMontosSonCero(montosCero));
+        assertFalse(grupo.todosLosMontosSonCero(montosNoCero));
+    }
+    
+    @Test
+    void testAñadirGastoNuloAlGrupo() {
+        // Crear usuarios para el grupo
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(liderGrupo);
+        Usuario user1 = new Usuario("Otro", "lider@example.com", "+123456789", "password", "1234567890123456");
+        
+        participantes.add(user1);
+        // Crear el grupo
+        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
+
+        // Intentar añadir un gasto nulo al grupo
+        
+        Exception exceptionNulo = assertThrows(IllegalArgumentException.class, () -> {
+            grupo.añadirGasto(grupo, liderGrupo, participantes,0.0, "hola", null,"hola");
+        });
+
+        // Verificar que se lance una excepción adecuada para gasto nulo
+        assertEquals("El monto del gasto debe ser mayor que 0.", exceptionNulo.getMessage());
+    }
+    
+    @Test
+    void testAñadirGastoSinPagador() {
+        // Crear usuarios para el grupo
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(liderGrupo);
+
+        // Crear el grupo
+        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
+
+        // Intentar añadir un gasto sin indicar el pagador
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            grupo.añadirGasto(grupo, null, participantes, 100.0, "Descripción", new Date(), "Actividad");
+        });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("El usuario que ha pagado el gasto no puede ser nulo.", exception.getMessage());
+    }
+    
+    @Test
+    void testAñadirGastoSinDeudores() {
+        // Crear usuarios para el grupo
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(liderGrupo);
+        Usuario usuarioQueHaPagadoMock = mock(Usuario.class);
+        participantes.add(usuarioQueHaPagadoMock);
+        // Crear el grupo
+        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
+
+        // Intentar añadir un gasto sin indicar los deudores
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            grupo.añadirGasto(grupo, usuarioQueHaPagadoMock, new ArrayList<>(), 100.0, "Descripción", new Date(), "Actividad");
+        });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("La lista de usuarios pagadores no puede estar vacía.", exception.getMessage());
+    }
+
+    @Test
+    void testAñadirGastoDeudoresNoEnGrupo() {
+        // Crear usuarios para el grupo
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(liderGrupo);
+        Usuario usuarioQueHaPagadoMock = mock(Usuario.class);
+        Usuario deudorNoEnGrupo = new Usuario("Deudor", "deudor@example.com", "+987654321", "password", "1234567890123457");
+        // Crear el grupo
+        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
+
+        // Intentar añadir un gasto con deudores que no están en el grupo
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            grupo.añadirGasto(grupo, usuarioQueHaPagadoMock, Collections.singletonList(deudorNoEnGrupo), 100.0, "Descripción", new Date(), "Actividad");
+        });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("Los deudores especificados no están en el grupo.", exception.getMessage());
+    }
+
+    
+    @Test
+    void testCalcularTransaccionesMinimas() {
+        // Crear un mock de Grupo
+        Grupo grupoMock = mock(Grupo.class);
+        
+        // Crear usuarios de prueba
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1111111111111111");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "2222222222222222");
+        
+        // Crear el objeto Grupo
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, new ArrayList<>());
+        
+        // Montos de cada usuario
+        Map<Usuario, Double> montosUsuarios = new HashMap<>();
+        montosUsuarios.put(usuario1, 100.0);
+        montosUsuarios.put(usuario2, -100.0);
+        
+        // Mockear el método getMontos
+        when(grupoMock.getMontos()).thenReturn(montosUsuarios);
+        
+        // Llamar al método calcularTransaccionesMinimas
+        grupo.calcularTransaccionesMinimas();
+        
+        // Verificar que las transacciones mínimas se hayan calculado correctamente
+        List<Gastos> gastos = grupo.getGastos();
+        assertNotNull(gastos);
+        assertEquals(1, gastos.size());
+        }
 }
