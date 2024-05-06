@@ -111,6 +111,9 @@ public class Usuario {
         return Objects.equals(nombreApellidos, usuario.nombreApellidos) && Objects.equals(correoElectronico, usuario.correoElectronico) && Objects.equals(numeroTelefono, usuario.numeroTelefono) && Objects.equals(contraseña, usuario.contraseña) && Objects.equals(numeroCuentaBancaria, usuario.numeroCuentaBancaria);
     }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombreApellidos, correoElectronico, numeroTelefono, contraseña, numeroCuentaBancaria);
+    }
 
 }

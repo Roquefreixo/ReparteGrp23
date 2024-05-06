@@ -2,6 +2,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List; 
+
 
 class GrupoTest {
 	
@@ -18,13 +24,18 @@ class GrupoTest {
         String fotoPerfil = "foto.jpg";
         Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
 
-        Grupo grupo = new Grupo(nombre, fotoPerfil, liderGrupo);
+        Usuario usuario1 = mock(Usuario.class);
+        Usuario usuario2 = mock(Usuario.class);
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        
+        Grupo grupo = new Grupo(nombre, fotoPerfil, liderGrupo, participantes);
 
         // Verificar que los atributos se inicializan correctamente
         assertEquals(nombre, grupo.getNombre());
         assertEquals(fotoPerfil, grupo.getFotoPerfil());
         assertEquals(liderGrupo, grupo.getLiderGrupo());
-        assertTrue(grupo.getParticipantes().isEmpty(), "La lista de participantes debe estar vacía");
     }
 
     @Test
@@ -34,7 +45,12 @@ class GrupoTest {
         String fotoPerfil = "foto.jpg";
         Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
 
-        assertThrows(IllegalArgumentException.class, () -> {new Grupo(nombre, fotoPerfil, liderGrupo);});
+        Usuario usuario1 = mock(Usuario.class);
+        Usuario usuario2 = mock(Usuario.class);
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        assertThrows(IllegalArgumentException.class, () -> {new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
     }
 
     @Test
@@ -44,7 +60,12 @@ class GrupoTest {
         String fotoPerfil = null;
         Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
 
-        assertThrows(IllegalArgumentException.class, () -> {new Grupo(nombre, fotoPerfil, liderGrupo); });
+        Usuario usuario1 = mock(Usuario.class);
+        Usuario usuario2 = mock(Usuario.class);
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        assertThrows(IllegalArgumentException.class, () -> {new Grupo(nombre, fotoPerfil, liderGrupo, participantes); });
     }
 
     @Test
@@ -54,7 +75,12 @@ class GrupoTest {
         String fotoPerfil = "foto.jpg";
         Usuario liderGrupo = null;
 
-        assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo);});
+        Usuario usuario1 = mock(Usuario.class);
+        Usuario usuario2 = mock(Usuario.class);
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
     }
     
     
@@ -63,7 +89,8 @@ class GrupoTest {
         usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890");
         usuario2 = new Usuario("María López", "maria@example.com", "+987654321", "password123", "0987654321");
         liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "0000000000");
-        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo);
+        List<Usuario> participantes = new ArrayList<>();
+        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 
     	
         assertTrue(grupo.addUserGrp(usuario1));
@@ -76,8 +103,8 @@ class GrupoTest {
     	
         usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890");
         liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "0000000000");
-
-        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo);
+        List<Usuario> participantes = new ArrayList<>();
+        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 
     	
         grupo.addUserGrp(usuario1);
@@ -113,4 +140,29 @@ class GrupoTest {
         assertEquals("9876543210987654", usuario.getNumeroCuentaBancaria());
     }
     
+    @Test
+    void testSettersAndGettersGrupo() {
+        // Crear objetos necesarios para la prueba
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1111111111111111"));
+        participantes.add(new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "2222222222222222"));
+
+        // Crear objeto Grupo
+        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
+
+        // Verificar los valores iniciales con los getters
+        assertEquals("Grupo de Prueba", grupo.getNombre());
+        assertEquals("foto.jpg", grupo.getFotoPerfil());
+        assertEquals(liderGrupo, grupo.getLiderGrupo());
+        assertEquals(participantes, grupo.getParticipantes());
+
+        // Modificar los valores con los setters
+        grupo.setNombre("Nuevo Nombre de Grupo");
+        grupo.setFotoPerfil("nueva_foto.jpg");
+
+        // Verificar los nuevos valores con los getters
+        assertEquals("Nuevo Nombre de Grupo", grupo.getNombre());
+        assertEquals("nueva_foto.jpg", grupo.getFotoPerfil());
+    }
 }

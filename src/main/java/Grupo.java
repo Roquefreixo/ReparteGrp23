@@ -22,7 +22,12 @@ public class Grupo {
         this.nombre = nombre;
         this.fotoPerfil = fotoPerfil;
         this.liderGrupo = liderGrupo;
-        this.participantes = new ArrayList<>();
+        if(participantes!=null) {
+        	this.participantes = participantes;
+        }else {
+        	this.participantes = new ArrayList<>();
+        }
+        
         this.montos = new HashMap<>();
         this.transaccion=new HashMap<>();
         // Inicializar montos para cada participante con 0
@@ -139,7 +144,7 @@ public class Grupo {
         return nombre;
     }
     
-    private void setNombre(String nombre) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
@@ -147,7 +152,7 @@ public class Grupo {
         return fotoPerfil;
     }
 
-    private void setFotoPerfil(String fotoPerfil) {
+    public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
 
@@ -155,17 +160,12 @@ public class Grupo {
         return liderGrupo;
     }
 
-    private void setLiderGrupo(Usuario liderGrupo) {
-        this.liderGrupo = liderGrupo;
-    }
-
+    
     public List<Usuario> getParticipantes() {
         return participantes;
     }
 
-    private void setParticipantes(List<Usuario> participantes) {
-        this.participantes = participantes;
-    }
+    
     
 
 }
