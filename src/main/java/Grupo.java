@@ -99,7 +99,16 @@ public class Grupo {
 
         // Imprimir las deudas o haberes de cada usuario
         System.out.println("Deudas/Haberes de cada usuario:");
-        calcularTransaccionesMinimas();
+        System.out.println(monto);
+        
+        for (Usuario usuario : gasto.getListaDeUsuariosPagadores()) {
+            if (usuario.equals(gasto.getUsuarioQueHaPagado())) {
+                montos.put(usuario, montos.getOrDefault(usuario, 0.0) + monto);
+            } else {
+                montos.put(usuario, montos.getOrDefault(usuario, 0.0) - monto);
+            }
+        }
+        //calcularTransaccionesMinimas();
     }
 
        
@@ -108,18 +117,6 @@ public class Grupo {
     	    List<String> transacciones = new ArrayList<>();
     	    List<Usuario> participantes = new ArrayList<>(montos.keySet());
     	    
-    	    // Iterar sobre los gastos
-    	    for (Gastos gasto : gastos) {
-    	        // Calcular el monto a pagar por cada participante del gasto
-    	        double montoPorUsuario = gasto.getMonto() / gasto.getListaDeUsuariosPagadores().size();
-    	        for (Usuario usuario : gasto.getListaDeUsuariosPagadores()) {
-    	            if (usuario.equals(gasto.getUsuarioQueHaPagado())) {
-    	                montos.put(usuario, montos.getOrDefault(usuario, 0.0) + montoPorUsuario);
-    	            } else {
-    	                montos.put(usuario, montos.getOrDefault(usuario, 0.0) - montoPorUsuario);
-    	            }
-    	        }
-    	    }
     	    
     	    // Mientras haya deudas pendientes
     	    while (!todosLosMontosSonCero(montos)) {
@@ -141,8 +138,8 @@ public class Grupo {
 
     	        // Realizar la transacción entre el deudor y el acreedor
     	        double transaccion = Math.min(-maxDeuda, maxHaber);
-    	        montos.put(deudor, montos.get(deudor) + transaccion);
-    	        montos.put(acreedor, montos.get(acreedor) - transaccion);
+    	        //montos.put(deudor, montos.get(deudor) + transaccion);
+    	        //montos.put(acreedor, montos.get(acreedor) - transaccion);
 
     	        // Agregar la transacción a la lista de transacciones mínimas
     	        transacciones.add(deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos());

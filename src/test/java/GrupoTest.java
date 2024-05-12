@@ -119,15 +119,27 @@ class GrupoTest {
         assertTrue(grupo.deleteUserGrp(usuario1));
         assertFalse(grupo.deleteUserGrp(usuario1)); // Intentar eliminar un usuario que no está en el grupo
         assertThrows(IllegalArgumentException.class, () -> {grupo.deleteUserGrp(null);}); //eliminar un usuario nulo
-      //Prueba de un usuario con haberes al eliminar
-        
-        List<Usuario> participantes2 = new ArrayList<>();
-        participantes2.add(liderGrupo);
-        grupo.añadirGasto(grupo, usuario1, participantes2, 15.0, null, null, null);  
-        assertFalse(grupo.deleteUserGrp(liderGrupo));//explicar que no funciona porque no se modifican bien los gastos.
-        
+      
     }
 
+    @Test
+    public void testEliminarParticipante2() {
+    	
+        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456121213");
+        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
+        grupo.addUserGrp(usuario1);
+        grupo.addUserGrp(liderGrupo);
+        List<Usuario> participantes2 = new ArrayList<>();
+        participantes2.add(liderGrupo);  
+        double monto = 100.0;
+        String descripcion = "Descripción del gasto";
+        Date fecha = new Date();
+        String actividad = "Actividad relacionada";
+        grupo.añadirGasto(grupo, usuario1, participantes2, monto, descripcion, fecha, actividad);
+        assertFalse(grupo.deleteUserGrp(liderGrupo));//explicar que no funciona porque no se modifican bien los gastos.
+    }
 
     @Test
     public void testGettersAndSetters() {
