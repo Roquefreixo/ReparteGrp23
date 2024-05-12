@@ -166,7 +166,21 @@ public class Grupo {
        
        
        
-       
+    public boolean reclamarDeuda(Usuario usuarioReclamador) {
+    	if (!participantes.contains(usuarioReclamador)) {
+            System.out.println("El usuario no pertenece al grupo.");
+            return false;
+        } else{
+            for (Usuario participante : participantes) {
+            	List<String> mensajes = new ArrayList<>();
+                mensajes.add(usuarioReclamador + " ha solicito que liquides la deuda con él.");
+            	participante.setMensajes(mensajes);
+           
+            }
+        	
+            return true; 
+        } 
+    }
 
     
     // Getters y setters
