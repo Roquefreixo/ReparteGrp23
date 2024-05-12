@@ -41,7 +41,11 @@ public class Grupo {
 
     // Añadir usuario a grupo
     public Boolean addUserGrp(Usuario usuario) {
-        if (participantes.contains(usuario)) {
+    	if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no puede ser nulo.");
+        }
+    	
+    	if (participantes.contains(usuario)) {
             System.out.println("El usuario ya pertenece al grupo.");
             return false;
         } else {
@@ -54,6 +58,9 @@ public class Grupo {
 
     // Eliminar usuario del grupo
     public Boolean deleteUserGrp(Usuario usuario) {
+    	if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no puede ser nulo.");
+        }
         if (!participantes.contains(usuario)) {
             System.out.println("El usuario no pertenece al grupo.");
             return false;

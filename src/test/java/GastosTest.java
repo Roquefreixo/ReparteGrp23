@@ -15,11 +15,11 @@ class GastosTest {
     @Test
     public void testCalcularHaberesDeberes() {
         // Preparación de datos de prueba
-        Grupo grupo = new Grupo("NombreGrupo", "foto.jpg", new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456"), new ArrayList<>());
-        Usuario usuarioQueHaPagado = new Usuario("Usuario1", "usuario1@example.com", "+987654321", "password", "9876543210987654");
+        Grupo grupo = new Grupo("NombreGrupo", "foto.jpg", new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213"), new ArrayList<>());
+        Usuario usuarioQueHaPagado = new Usuario("Usuario1", "usuario1@example.com", "+987654321", "password", "1234567890123456121213");
         List<Usuario> listaDeUsuariosPagadores = new ArrayList<>();
-        listaDeUsuariosPagadores.add(new Usuario("Usuario2", "usuario2@example.com", "+111111111", "password", "1111111111222222"));
-        listaDeUsuariosPagadores.add(new Usuario("Usuario3", "usuario3@example.com", "+333333333", "password", "3333333333444444"));
+        listaDeUsuariosPagadores.add(new Usuario("Usuario2", "usuario2@example.com", "+111111111", "password", "1234567890123456121213"));
+        listaDeUsuariosPagadores.add(new Usuario("Usuario3", "usuario3@example.com", "+333333333", "password", "1234567890123456121213"));
         double monto = 100.0;
         String descripcion = "Descripción del gasto";
         Date fecha = new Date();

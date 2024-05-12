@@ -26,7 +26,7 @@ class GrupoTest {
         // Caso de prueba 1: Crear un grupo con valores válidos
         String nombre = "Grupo de Prueba";
         String fotoPerfil = "foto.jpg";
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
 
         Usuario usuario1 = mock(Usuario.class);
         Usuario usuario2 = mock(Usuario.class);
@@ -40,6 +40,9 @@ class GrupoTest {
         assertEquals(nombre, grupo.getNombre());
         assertEquals(fotoPerfil, grupo.getFotoPerfil());
         assertEquals(liderGrupo, grupo.getLiderGrupo());
+        
+        
+        
     }
 
     @Test
@@ -47,7 +50,7 @@ class GrupoTest {
         // Caso de prueba 2: Crear un grupo con nombre nulo
         String nombre = null;
         String fotoPerfil = "foto.jpg";
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
 
         Usuario usuario1 = mock(Usuario.class);
         Usuario usuario2 = mock(Usuario.class);
@@ -62,7 +65,7 @@ class GrupoTest {
         // Caso de prueba 3: Crear un grupo con foto de perfil nula
         String nombre = "Grupo de Prueba";
         String fotoPerfil = null;
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
 
         Usuario usuario1 = mock(Usuario.class);
         Usuario usuario2 = mock(Usuario.class);
@@ -90,9 +93,9 @@ class GrupoTest {
     
     @Test
     public void testAgregarParticipante() {
-        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890");
-        usuario2 = new Usuario("María López", "maria@example.com", "+987654321", "password123", "0987654321");
-        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "0000000000");
+        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456121213");
+        usuario2 = new Usuario("María López", "maria@example.com", "+987654321", "password123", "1234567890123456121213");
+        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
         grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 
@@ -100,13 +103,14 @@ class GrupoTest {
         assertTrue(grupo.addUserGrp(usuario1));
         assertTrue(grupo.addUserGrp(usuario2));
         assertFalse(grupo.addUserGrp(usuario1)); // Intentar agregar un usuario que ya está en el grupo
+        assertThrows(IllegalArgumentException.class, () -> {grupo.addUserGrp(null);}); //agregar un usuario nulo
     }
 
     @Test
     public void testEliminarParticipante() {
     	
-        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890");
-        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "0000000000");
+        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456121213");
+        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
         grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 
@@ -114,20 +118,28 @@ class GrupoTest {
         grupo.addUserGrp(usuario1);
         assertTrue(grupo.deleteUserGrp(usuario1));
         assertFalse(grupo.deleteUserGrp(usuario1)); // Intentar eliminar un usuario que no está en el grupo
+        assertThrows(IllegalArgumentException.class, () -> {grupo.deleteUserGrp(null);}); //eliminar un usuario nulo
+      //Prueba de un usuario con haberes al eliminar
+        
+        List<Usuario> participantes2 = new ArrayList<>();
+        participantes2.add(liderGrupo);
+        grupo.añadirGasto(grupo, usuario1, participantes2, 15.0, null, null, null);  
+        assertFalse(grupo.deleteUserGrp(liderGrupo));//explicar que no funciona porque no se modifican bien los gastos.
+        
     }
 
 
     @Test
     public void testGettersAndSetters() {
         // Crear un usuario de ejemplo
-        Usuario usuario = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456");
+        Usuario usuario = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456121213");
         
         // Verificar los getters
         assertEquals("Juan Pérez", usuario.getNombreApellidos());
         assertEquals("juan@example.com", usuario.getCorreoElectronico());
         assertEquals("+123456789", usuario.getNumeroTelefono());
         assertEquals("password", usuario.getContraseña());
-        assertEquals("1234567890123456", usuario.getNumeroCuentaBancaria());
+        assertEquals("1234567890123456121213", usuario.getNumeroCuentaBancaria());
         
         // Modificar los atributos usando setters
         usuario.setNombreApellidos("María García");
@@ -147,10 +159,10 @@ class GrupoTest {
     @Test
     void testSettersAndGettersGrupo() {
         // Crear objetos necesarios para la prueba
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
-        participantes.add(new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1111111111111111"));
-        participantes.add(new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "2222222222222222"));
+        participantes.add(new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1234567890123456121213"));
+        participantes.add(new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "1234567890123456121213"));
 
         // Crear objeto Grupo
         Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
@@ -175,8 +187,8 @@ class GrupoTest {
     @Test
     public void testAñadirGastoValido() {
         // Crear usuarios y grupo reales para el test
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
-        Usuario usuarioQueHaPagado = new Usuario("Usuario Pagador", "pagador@example.com", "+987654321", "password", "9876543210987654");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
+        Usuario usuarioQueHaPagado = new Usuario("Usuario Pagador", "pagador@example.com", "+987654321", "password", "1234567890123456121213");
         List<Usuario> listaDeUsuariosPagadores = new ArrayList<>();
         listaDeUsuariosPagadores.add(liderGrupo);
         listaDeUsuariosPagadores.add(usuarioQueHaPagado);
@@ -197,7 +209,11 @@ class GrupoTest {
 
         // Verificar que el monto del gasto se haya reflejado en el grupo
         Map<Usuario, Double> montos = grupo.getMontos();
+        
+        
         assertEquals(monto, montos.get(usuarioQueHaPagado));
+        
+        
     }
 
     
@@ -224,10 +240,10 @@ class GrupoTest {
     @Test
     void testAñadirGastoNuloAlGrupo() {
         // Crear usuarios para el grupo
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
         participantes.add(liderGrupo);
-        Usuario user1 = new Usuario("Otro", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario user1 = new Usuario("Otro", "lider@example.com", "+123456789", "password", "1234567890123456121213");
         
         participantes.add(user1);
         // Crear el grupo
@@ -246,7 +262,7 @@ class GrupoTest {
     @Test
     void testAñadirGastoSinPagador() {
         // Crear usuarios para el grupo
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
         participantes.add(liderGrupo);
 
@@ -265,7 +281,7 @@ class GrupoTest {
     @Test
     void testAñadirGastoSinDeudores() {
         // Crear usuarios para el grupo
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
         participantes.add(liderGrupo);
         Usuario usuarioQueHaPagadoMock = mock(Usuario.class);
@@ -277,19 +293,23 @@ class GrupoTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             grupo.añadirGasto(grupo, usuarioQueHaPagadoMock, new ArrayList<>(), 100.0, "Descripción", new Date(), "Actividad");
         });
-
+        
+        
+        
         // Verificar que se lance una excepción adecuada
         assertEquals("La lista de usuarios pagadores no puede estar vacía.", exception.getMessage());
+        
+      
     }
 
     @Test
     void testAñadirGastoDeudoresNoEnGrupo() {
         // Crear usuarios para el grupo
-        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456");
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
         List<Usuario> participantes = new ArrayList<>();
         participantes.add(liderGrupo);
         Usuario usuarioQueHaPagadoMock = mock(Usuario.class);
-        Usuario deudorNoEnGrupo = new Usuario("Deudor", "deudor@example.com", "+987654321", "password", "1234567890123457");
+        Usuario deudorNoEnGrupo = new Usuario("Deudor", "deudor@example.com", "+987654321", "password", "1234567890123456121213");
         // Crear el grupo
         Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
 
@@ -309,8 +329,8 @@ class GrupoTest {
         Grupo grupoMock = mock(Grupo.class);
         
         // Crear usuarios de prueba
-        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1111111111111111");
-        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "2222222222222222");
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "1234567890123456121213");
         
         // Crear el objeto Grupo
         Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, new ArrayList<>());
@@ -328,7 +348,10 @@ class GrupoTest {
         
         // Verificar que las transacciones mínimas se hayan calculado correctamente
         List<Gastos> gastos = grupo.getGastos();
+        
+        
         assertNotNull(gastos);
         assertEquals(1, gastos.size());
+        
         }
 }

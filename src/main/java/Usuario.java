@@ -9,8 +9,6 @@ public class Usuario {
     private String numeroTelefono;
     private String contraseña;
     private String numeroCuentaBancaria;
-    private Date fechaCreacion;
-    private Date fechaExpiracion;
     private List<String> mensajes;
 
     // Constructor
@@ -21,14 +19,17 @@ public class Usuario {
         
         // Verificar si la contraseña es igual al nombre y/o apellidos
         if (contraseña.equals(nombreApellidos)) {
-            throw new IllegalArgumentException("La contraseña no puede ser igual al nombre y/o apellidos del usuario.");
+            throw new IllegalArgumentException("La contraseña no puede ser igual al nombre y apellidos del usuario.");
         }
         
         // Verificar si el número de teléfono contiene caracteres, excluyendo el "+"
         if (!numeroTelefono.matches("^\\+[0-9]+$")) {
             throw new IllegalArgumentException("El número de teléfono debe contener solo dígitos después del signo de más (+).");
         }
-        
+        if(numeroCuentaBancaria.length() != 22) {
+        	throw new IllegalArgumentException("El número de cuenta bancaria debe tener exactamente 22 dígitos.");
+            
+        }
         this.nombreApellidos = nombreApellidos;
         this.correoElectronico = correoElectronico;
         this.numeroTelefono = numeroTelefono;
