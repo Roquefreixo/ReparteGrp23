@@ -89,6 +89,9 @@ public class Grupo {
         if (listaDeUsuariosPagadores.isEmpty()) {
             throw new IllegalArgumentException("La lista de usuarios pagadores no puede estar vacía.");
         }
+        if (!grupo.getParticipantes().contains(usuarioQueHaPagado)) {
+            throw new IllegalArgumentException("El usuario que ha pagado no pertenece al grupo.");
+        }
         for (Usuario deudor : listaDeUsuariosPagadores) {
             if (!grupo.getParticipantes().contains(deudor)) {
                 throw new IllegalArgumentException("Los deudores especificados no están en el grupo.");
@@ -175,6 +178,7 @@ public class Grupo {
             	List<String> mensajes = new ArrayList<>();
                 mensajes.add(usuarioReclamador + " ha solicito que liquides la deuda con él.");
             	participante.setMensajes(mensajes);
+            	participante.imprimirMensajes();
            
             }
         	

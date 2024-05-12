@@ -271,6 +271,7 @@ class GrupoTest {
         assertEquals("El monto del gasto debe ser mayor que 0.", exceptionNulo.getMessage());
     }
     
+    
     @Test
     void testAñadirGastoSinPagador() {
         // Crear usuarios para el grupo
@@ -313,6 +314,20 @@ class GrupoTest {
         
       
     }
+    
+    @Test
+    void testAñadirGastoPagadorNoEnGrupo() {
+        // Crear usuarios para el grupo
+        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(liderGrupo);
+        Usuario pagadorNoEnGrupo = new Usuario("Deudor", "deudor@example.com", "+987654321", "password", "1234567890123456121213");
+        // Crear el grupo
+        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {grupo.añadirGasto(grupo, pagadorNoEnGrupo, participantes, 100.0, "Descripción", new Date(), "Actividad");});
+        assertEquals("El usuario que ha pagado no pertenece al grupo.", exception.getMessage());
+    }
 
     @Test
     void testAñadirGastoDeudoresNoEnGrupo() {
@@ -324,7 +339,7 @@ class GrupoTest {
         Usuario deudorNoEnGrupo = new Usuario("Deudor", "deudor@example.com", "+987654321", "password", "1234567890123456121213");
         // Crear el grupo
         Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
-
+        grupo.addUserGrp(usuarioQueHaPagadoMock);
         // Intentar añadir un gasto con deudores que no están en el grupo
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             grupo.añadirGasto(grupo, usuarioQueHaPagadoMock, Collections.singletonList(deudorNoEnGrupo), 100.0, "Descripción", new Date(), "Actividad");
@@ -334,6 +349,29 @@ class GrupoTest {
         assertEquals("Los deudores especificados no están en el grupo.", exception.getMessage());
     }
 
+    @Test
+    void testAgregarGastoYRepartir() {
+        
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        
+        // Crear un Grupo
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+  
+        
+        grupo.añadirGasto(grupo, usuario1, participantes, 100.0, "Descripción", new Date(), "Actividad");
+        
+        // Verificar que el monto del gasto se ha repartido correctamente entre los participantes del grupo
+        Map<Usuario, Double> montos = grupo.getMontos();
+        double montoEsperadoPorUsuario = 100 / participantes.size();
+        for (Usuario participante : participantes) {
+            assertEquals(montoEsperadoPorUsuario, montos.get(participante));
+        }
+    }
     
     @Test
     void testCalcularTransaccionesMinimas() {
@@ -366,4 +404,34 @@ class GrupoTest {
         assertEquals(1, gastos.size());
         
         }
+    
+    
+    
+    
+    
+    @Test
+    void testReclamarDeuda_UsuarioPerteneceAlGrupo() {
+        // Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        // Llamar al método reclamarDeuda con un usuario que pertenece al grupo
+        assertTrue(grupo.reclamarDeuda(usuario1));
+        
+        // Verificar que se han enviado mensajes a todos los participantes del grupo
+        for (Usuario participante : participantes) {
+            assertEquals(1, participante.getMensajes().size());
+        }
+        //el reclamador no pertenece al grupo
+        Usuario usuario3 = new Usuario("Usuario 3", "usuario3@", "+987654322", "password2", "1234567890123456121213");
+        assertFalse(grupo.reclamarDeuda(usuario3));
+        
+        //el reclamador es nulo
+        assertFalse(grupo.reclamarDeuda(null));
+        
+    }
 }
