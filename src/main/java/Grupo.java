@@ -193,7 +193,7 @@ public class Grupo {
     public boolean añadirActividad(String nombreActividad, Date fechaInicio, float duracion, String lugar, String descripcion) {
         // Verificar que la actividad no sea nula
         if (nombreActividad == null) {
-            throw new IllegalArgumentException("El nombre de la actividad no puede ser nulo.");
+            throw new IllegalArgumentException("Los campos de la actividad no pueden ser nulos.");
         }
 
         // Verificar que los campos de la actividad no sean nulos
@@ -206,7 +206,7 @@ public class Grupo {
         }
         
         if(descripcion.length()<=5 || descripcion.length()>150) {
-        	throw new IllegalArgumentException("La longitud de la descripcion debe estar entre 5 y 150.");
+        	throw new IllegalArgumentException("La longitud de la descripcion debe ser mayor a 5 y menor a 151.");
         }
         
         Actividad actNueva = new Actividad(nombreActividad, fechaInicio, duracion, lugar, descripcion);
@@ -215,13 +215,13 @@ public class Grupo {
         
         if(!calendarioActividades.isEmpty()) {
         	for (Actividad act : calendarioActividades) {
-                if (act.getLugar().equals(actNueva.getLugar()) && act.getFechaInicio().equals(actNueva.getFechaInicio())) {
+                if (act.getLugar().equals(actNueva.getLugar()) || act.getFechaInicio().equals(actNueva.getFechaInicio())) {
                     return false; // Actividad repetida encontrada, no se añade
                 }
             }
-        }else {
-        	calendarioActividades.add(actNueva);
-        }        
+        }
+        calendarioActividades.add(actNueva);
+                
         return true;
     }
     

@@ -434,4 +434,236 @@ class GrupoTest {
         assertFalse(grupo.reclamarDeuda(null));
         
     }
+    
+    
+    
+    ///Pruebas de añadir actividad
+    @Test
+    public void testAñadirActividadValida() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        assertTrue(grupo.añadirActividad("Canoa",new Date(1), 180,"el rio", "En esta actividad iremos en canoa por el rio"));
+        
+        
+    }
+    
+   
+    
+    @Test
+    public void testAñadirActividadConNombreNulo() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        	grupo.añadirActividad(null,new Date(1), 180,"el rio", "En esta actividad iremos en canoa por el rio"); });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("Los campos de la actividad no pueden ser nulos.", exception.getMessage());
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConFechaNulo() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+   
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        	grupo.añadirActividad("Canoa",null, 180,"el rio", "En esta actividad iremos en canoa por el rio"); });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("Los campos de la actividad no pueden ser nulos.", exception.getMessage());
+
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConLugarNulo() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        	grupo.añadirActividad("Canoa",new Date(1), 180,null, "En esta actividad iremos en canoa por el rio"); });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("Los campos de la actividad no pueden ser nulos.", exception.getMessage());
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConDuracionCero() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        	grupo.añadirActividad("Canoa",new Date(1), 0,"el rio", "En esta actividad iremos en canoa por el rio"); });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("La duracion de la actividad debe ser positiva.", exception.getMessage());
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConDescripcion5() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        	grupo.añadirActividad("Canoa",new Date(1), 5,"el rio", "Holas"); });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("La longitud de la descripcion debe ser mayor a 5 y menor a 151.", exception.getMessage());
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConDescripcion151() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        	grupo.añadirActividad("Canoa",new Date(1), 5,"el rio", "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y relevante en el mercado actu"); });
+
+        // Verificar que se lance una excepción adecuada
+        assertEquals("La longitud de la descripcion debe ser mayor a 5 y menor a 151.", exception.getMessage());
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConDescripcion6() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+      
+        assertTrue(grupo.añadirActividad("Canoa",new Date(1), 5,"el rio", "Estasi"));
+    
+        
+    }
+    @Test
+    public void testAñadirActividadConDescripcion150() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+      
+        assertTrue(grupo.añadirActividad("Canoa",new Date(1), 5,"el rio", "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConCalendarioLleno() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        grupo.añadirActividad("Canoa",new Date(1), 5,"el rio", "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu");
+        
+        assertTrue(grupo.añadirActividad("Canoa",new Date(3), 5,"mi casa", "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConCalendarioLlenoYFechaIgual() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        Date mifecha= new Date(1);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        grupo.añadirActividad("Canoa",mifecha, 5,"el rio", "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu");
+        
+        assertFalse(grupo.añadirActividad("Canoa",mifecha, 5,"mi casa", "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConCalendarioLlenoYLugarIgual() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        String misitio= "el rio";
+        
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        grupo.añadirActividad("Canoa",new Date(1), 5,misitio, "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu");
+        
+        assertFalse(grupo.añadirActividad("Canoa",new Date(2), 5,misitio, "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
+    
+        
+    }
+    
+    @Test
+    public void testAñadirActividadConCalendarioLlenoYLasDosIgual() {
+    	// Crear un Grupo
+        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        String misitio= "el rio";
+        Date mifecha= new Date(1);
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        grupo.añadirActividad("Canoa",mifecha, 5,misitio, "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu");
+        
+        assertFalse(grupo.añadirActividad("Canoa",mifecha, 5,misitio, "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
+    
+        
+    }
 }
