@@ -12,6 +12,7 @@ public class Grupo {
     private Map<Usuario, Double> montos;
     private Map<Usuario, Usuario> transaccion;//primer usuario le debe al segundo
     private List<Gastos> gastos;
+    private List<Actividad> calendarioActividades;
 
     // Constructor
     public Grupo(String nombre, String fotoPerfil, Usuario liderGrupo,List<Usuario> participantes) {
@@ -186,6 +187,31 @@ public class Grupo {
         } 
     }
 
+    
+ // Método para añadir actividad al calendario
+    public boolean addActCal(Actividad actividad) {
+        // Verificar que la actividad no sea nula
+        if (actividad == null) {
+            throw new IllegalArgumentException("La actividad no puede ser nula.");
+        }
+
+        // Verificar que los campos de la actividad no sean nulos
+        if (actividad.getNombreActividad() == null || actividad.getFechaInicio() == null ||
+                actividad.getLugar() == null || actividad.getDescripcion() == null) {
+            throw new IllegalArgumentException("Los campos de la actividad no pueden ser nulos.");
+        }
+
+        // Verificar si la actividad ya existe en el calendario (mismo lugar y hora)
+        for (Actividad act : calendarioActividades) {
+            if (act.getLugar().equals(actividad.getLugar()) && act.getFechaInicio().equals(actividad.getFechaInicio())) {
+                return false; // Actividad repetida encontrada, no se añade
+            }
+        }
+
+        // Si no hay actividades repetidas, añadir la actividad al calendario
+        calendarioActividades.add(actividad);
+        return true;
+    }
     
     // Getters y setters
     public String getNombre() {
