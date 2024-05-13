@@ -9,7 +9,11 @@ public class Actividad {
 
     // Constructor
     public Actividad(String nombreActividad, Date fechaInicio, float duracion, String lugar, String descripcion) {
-        this.nombreActividad = nombreActividad;
+        if (nombreActividad == null || fechaInicio == null || lugar == null || descripcion == null) {
+            throw new IllegalArgumentException("Ningún parámetro puede ser nulo.");
+        }
+        
+    	this.nombreActividad = nombreActividad;
         this.fechaInicio = fechaInicio;
         this.duracion = duracion;
         this.lugar = lugar;
