@@ -225,6 +225,23 @@ public class Grupo {
         return true;
     }
     
+    //Metodo para visualizar las actividades presentes en el calendario de actividades
+    public void visualizarCalendarioActividades() {
+    	if (calendarioActividades.isEmpty()) {
+            System.out.println("No hay actividades en el calendario.");
+        } else {
+            System.out.println("Calendario de Actividades:");
+            for (Actividad actividad : calendarioActividades) {
+                System.out.println("Nombre: " + actividad.getNombreActividad());
+                System.out.println("Fecha de inicio: " + actividad.getFechaInicio());
+                System.out.println("Duración: " + actividad.getDuracion());
+                System.out.println("Lugar: " + actividad.getLugar());
+                System.out.println("Descripción: " + actividad.getDescripcion());
+                System.out.println("-----------------------------");
+            }
+        }
+    }
+    
     // Getters y setters
     public String getNombre() {
         return nombre;

@@ -54,5 +54,5 @@ public class ActividadTest {
         assertEquals("Madrid", actividad.getLugar());
         assertEquals("Visita al ayuntamiento de Madrid", actividad.getDescripcion());
 
-
+    }
 }
