@@ -734,6 +734,34 @@ class GrupoTest {
 		    }
 		}
 		
+		
+		@Test
+		public void pruebaAceptacion2() {
+			System.out.println("---------------ACEPTACION-----------------");
+			Usuario usuarioEva = new Usuario ("Eva", "eva@example.com", "+123456789", "contraseña123", "1234567890123456789012");
+	    	Usuario usuarioLuis = new Usuario ("Luis", "luis@example.com", "+987654321", "contraseña456", "9876543210123456789012");
+	    	Usuario usuarioMarta = new Usuario ("Marta", "marta@example.com", "+111111111", "contraseña789", "1111111110123456789012");
+	    	Usuario usuarioJuan = new Usuario ("Juan", "juan@example.com", "+222222222", "contraseñaabc", "2222222220123456789012");
+	        
+	        List<Usuario> participantes= new ArrayList<>();
+	        participantes.add(usuarioEva);
+	        participantes.add(usuarioLuis);
+	        participantes.add(usuarioMarta);
+	        participantes.add(usuarioJuan);
+	        
+	        Grupo g1 = new Grupo("Los mejores", "foto.jpg", usuarioEva, participantes);
+	        //g1.añadirGasto(g1, usuarioEva, participantes, 11.30, "Descripción del gasto", new Date(), "Actividad");
+	        g1.reclamarDeuda(usuarioEva);
+	        Date fecha = new Date(02-01-1970);
+	        
+	        g1.añadirActividad("Visita al museo del Prado", new Date(1),120, "Museo del Prado","Visistaremos el hermoso Museo del Prado");
+	        g1.añadirActividad("Canoa",new Date(86400000) , 90, "El rio", "Iremos en canoa por el río ");
+	        
+	        System.out.println("--------------------------------");
+	        g1.visualizarActividades();
+	        System.out.println("---------------ACEPTACION-----------------");
+		}
+		
 	}
 	
 

@@ -131,7 +131,7 @@ public class Grupo {
         //calcularTransaccionesMinimas();
     }
 
-   /*    
+     /*  
     public void calcularTransaccionesMinimas() {
         List<String> transacciones = new ArrayList<>();
         Map<Usuario, Double> montosCopiados = new HashMap<>(montos);
@@ -170,9 +170,9 @@ public class Grupo {
         for (String transaccion : transacciones) {
             System.out.println(transaccion);
         }
-    }
+    }*/
     
-*/
+
        // Función auxiliar para verificar si todos los montos en el mapa son cero
        public boolean todosLosMontosSonCero(Map<Usuario, Double> montos) {
            for (double monto : montos.values()) {
@@ -193,7 +193,7 @@ public class Grupo {
         } else{
             for (Usuario participante : participantes) {
             	List<String> mensajes = new ArrayList<>();
-                mensajes.add(usuarioReclamador + " ha solicito que liquides la deuda con él.");
+                mensajes.add(usuarioReclamador.getNombreApellidos() + " ha solicito que liquides la deuda con ella.");
             	participante.setMensajes(mensajes);
             	participante.imprimirMensajes();
            
@@ -250,10 +250,10 @@ public class Grupo {
             Collections.sort(calendarioActividades, Comparator.comparing(Actividad::getFechaInicio));
             
             // Limitar la cantidad de actividades a mostrar (por ejemplo, a las primeras 10)
-            int cantidadMaxima = Math.min(calendarioActividades.size(), 10);
+            
             actividadesStr.append("Actividades en el calendario:\n");
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            for (int i = 0; i < cantidadMaxima; i++) {
+            for (int i = 0; i < this.calendarioActividades.size(); i++) {
                 Actividad actividad = calendarioActividades.get(i);
                 if (actividad != null) { // Validación de objeto nulo
                     actividadesStr.append("Nombre: ").append(actividad.getNombreActividad()).append("\n");
