@@ -37,6 +37,7 @@ public class Grupo {
         }
 
         this.gastos=new ArrayList<>();
+        this.calendarioActividades= new ArrayList<>();
     }
 
 
@@ -189,27 +190,38 @@ public class Grupo {
 
     
  // Método para añadir actividad al calendario
-    public boolean addActCal(Actividad actividad) {
+    public boolean añadirActividad(String nombreActividad, Date fechaInicio, float duracion, String lugar, String descripcion) {
         // Verificar que la actividad no sea nula
-        if (actividad == null) {
-            throw new IllegalArgumentException("La actividad no puede ser nula.");
+        if (nombreActividad == null) {
+            throw new IllegalArgumentException("El nombre de la actividad no puede ser nulo.");
         }
 
         // Verificar que los campos de la actividad no sean nulos
-        if (actividad.getNombreActividad() == null || actividad.getFechaInicio() == null ||
-                actividad.getLugar() == null || actividad.getDescripcion() == null) {
+        if (fechaInicio == null || lugar==null ) {
             throw new IllegalArgumentException("Los campos de la actividad no pueden ser nulos.");
         }
-
-        // Verificar si la actividad ya existe en el calendario (mismo lugar y hora)
-        for (Actividad act : calendarioActividades) {
-            if (act.getLugar().equals(actividad.getLugar()) && act.getFechaInicio().equals(actividad.getFechaInicio())) {
-                return false; // Actividad repetida encontrada, no se añade
-            }
+        
+        if(duracion<=0) {
+        	throw new IllegalArgumentException("La duracion de la actividad debe ser positiva.");
         }
-
-        // Si no hay actividades repetidas, añadir la actividad al calendario
-        calendarioActividades.add(actividad);
+        
+        if(descripcion.length()<=5 || descripcion.length()>150) {
+        	throw new IllegalArgumentException("La longitud de la descripcion debe estar entre 5 y 150.");
+        }
+        
+        Actividad actNueva = new Actividad(nombreActividad, fechaInicio, duracion, lugar, descripcion);
+        
+        // Verificar si la actividad ya existe en el calendario (mismo lugar y hora)
+        
+        if(!calendarioActividades.isEmpty()) {
+        	for (Actividad act : calendarioActividades) {
+                if (act.getLugar().equals(actNueva.getLugar()) && act.getFechaInicio().equals(actNueva.getFechaInicio())) {
+                    return false; // Actividad repetida encontrada, no se añade
+                }
+            }
+        }else {
+        	calendarioActividades.add(actNueva);
+        }        
         return true;
     }
     
