@@ -1,4 +1,7 @@
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
@@ -32,8 +35,10 @@ public class Grupo {
         this.montos = new HashMap<>();
         this.transaccion=new HashMap<>();
         // Inicializar montos para cada participante con 0
-        for (Usuario participante : participantes) {
-            this.montos.put(participante, 0.0);
+        if(this.participantes.size()>0) {
+	      for (Usuario participante : participantes) {
+	         this.montos.put(participante, 0.0);
+	      }
         }
 
         this.gastos=new ArrayList<>();
@@ -103,61 +108,71 @@ public class Grupo {
         gastos.add(gasto);
 
         // Imprimir las deudas o haberes de cada usuario
-        System.out.println("Deudas/Haberes de cada usuario:");
-        System.out.println(monto);
         
+        
+        monto= monto/ gasto.getListaDeUsuariosPagadores().size();
         for (Usuario usuario : gasto.getListaDeUsuariosPagadores()) {
             if (usuario.equals(gasto.getUsuarioQueHaPagado())) {
                 montos.put(usuario, montos.getOrDefault(usuario, 0.0) + monto);
             } else {
                 montos.put(usuario, montos.getOrDefault(usuario, 0.0) - monto);
+                List<String> mensajes = new ArrayList<>();
+                mensajes.add(usuario.getNombreApellidos() + " le debe "+ monto+ " a "+ usuarioQueHaPagado.getNombreApellidos());
+                usuario.setMensajes(mensajes);
+                
+                
             }
+            
         }
+        
+        
+        //System.out.println("Se le debe "+ monto+ " a "+ usuarioQueHaPagado.getNombreApellidos());
+        
         //calcularTransaccionesMinimas();
     }
 
-       
-       // Función para calcular transacciones mínimas
-       public void calcularTransaccionesMinimas() {
-    	    List<String> transacciones = new ArrayList<>();
-    	    List<Usuario> participantes = new ArrayList<>(montos.keySet());
-    	    
-    	    
-    	    // Mientras haya deudas pendientes
-    	    while (!todosLosMontosSonCero(montos)) {
-    	        // Encontrar el deudor y el acreedor con la mayor deuda y el mayor haber
-    	        Usuario deudor = null;
-    	        Usuario acreedor = null;
-    	        double maxDeuda = Double.MIN_VALUE;
-    	        double maxHaber = Double.MIN_VALUE;
-    	        for (Usuario participante : participantes) {
-    	            double monto = montos.get(participante);
-    	            if (monto < 0 && monto < maxDeuda) {
-    	                deudor = participante;
-    	                maxDeuda = monto;
-    	            } else if (monto > 0 && monto > maxHaber) {
-    	                acreedor = participante;
-    	                maxHaber = monto;
-    	            }
-    	        }
+   /*    
+    public void calcularTransaccionesMinimas() {
+        List<String> transacciones = new ArrayList<>();
+        Map<Usuario, Double> montosCopiados = new HashMap<>(montos);
+        
+        // Mientras haya deudas pendientes
+        while (!todosLosMontosSonCero(montosCopiados)) {
+            // Encontrar el deudor y el acreedor con la mayor deuda y el mayor haber
+            Usuario deudor = null;
+            Usuario acreedor = null;
+            double maxDeuda = Double.MIN_VALUE;
+            double maxHaber = Double.MIN_VALUE;
+            for (Usuario participante : montosCopiados.keySet()) {
+                double monto = montosCopiados.get(participante);
+                if (monto < 0 && monto < maxDeuda) {
+                    deudor = participante;
+                    maxDeuda = monto;
+                } else if (monto > 0 && monto > maxHaber) {
+                    acreedor = participante;
+                    maxHaber = monto;
+                }
+            }
 
-    	        // Realizar la transacción entre el deudor y el acreedor
-    	        double transaccion = Math.min(-maxDeuda, maxHaber);
-    	        //montos.put(deudor, montos.get(deudor) + transaccion);
-    	        //montos.put(acreedor, montos.get(acreedor) - transaccion);
+            // Realizar la transacción entre el deudor y el acreedor
+            double transaccion = Math.min(-maxDeuda, maxHaber);
 
-    	        // Agregar la transacción a la lista de transacciones mínimas
-    	        transacciones.add(deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos());
-    	        this.transaccion.put(deudor, acreedor);
-    	        deudor.setMensajes(transacciones);
-    	    }
+            // Agregar la transacción a la lista de transacciones mínimas
+            String nuevaTransaccion = deudor.getNombreApellidos() + " paga " + transaccion + " a " + acreedor.getNombreApellidos();
+            transacciones.add(nuevaTransaccion);
+            System.out.println(nuevaTransaccion);
+            // Actualizar la copia de montos
+            montosCopiados.put(deudor, montosCopiados.getOrDefault(deudor, 0.0) + transaccion);
+            montosCopiados.put(acreedor, montosCopiados.getOrDefault(acreedor, 0.0) - transaccion);
+        }
 
-    	    // Imprimir las transacciones mínimas
-    	    for (String transaccion : transacciones) {
-    	        System.out.println(transaccion);
-    	    }
-    	}
-
+        // Imprimir las transacciones mínimas
+        for (String transaccion : transacciones) {
+            System.out.println(transaccion);
+        }
+    }
+    
+*/
        // Función auxiliar para verificar si todos los montos en el mapa son cero
        public boolean todosLosMontosSonCero(Map<Usuario, Double> montos) {
            for (double monto : montos.values()) {
@@ -226,20 +241,32 @@ public class Grupo {
     }
     
     //Metodo para visualizar las actividades presentes en el calendario de actividades
-    public void visualizarCalendarioActividades() {
-    	if (calendarioActividades.isEmpty()) {
-            System.out.println("No hay actividades en el calendario.");
+    public String visualizarActividades() {
+        StringBuilder actividadesStr = new StringBuilder();
+        if (calendarioActividades.isEmpty()) {
+            actividadesStr.append("No hay actividades en el calendario.");
         } else {
-            System.out.println("Calendario de Actividades:");
-            for (Actividad actividad : calendarioActividades) {
-                System.out.println("Nombre: " + actividad.getNombreActividad());
-                System.out.println("Fecha de inicio: " + actividad.getFechaInicio());
-                System.out.println("Duración: " + actividad.getDuracion());
-                System.out.println("Lugar: " + actividad.getLugar());
-                System.out.println("Descripción: " + actividad.getDescripcion());
-                System.out.println("-----------------------------");
+            // Ordenar las actividades por fecha de inicio
+            Collections.sort(calendarioActividades, Comparator.comparing(Actividad::getFechaInicio));
+            
+            // Limitar la cantidad de actividades a mostrar (por ejemplo, a las primeras 10)
+            int cantidadMaxima = Math.min(calendarioActividades.size(), 10);
+            actividadesStr.append("Actividades en el calendario:\n");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            for (int i = 0; i < cantidadMaxima; i++) {
+                Actividad actividad = calendarioActividades.get(i);
+                if (actividad != null) { // Validación de objeto nulo
+                    actividadesStr.append("Nombre: ").append(actividad.getNombreActividad()).append("\n");
+                    actividadesStr.append("Fecha de inicio: ").append(sdf.format(actividad.getFechaInicio())).append("\n");
+                    actividadesStr.append("Duración: ").append(actividad.getDuracion()).append(" horas\n");
+                    actividadesStr.append("Lugar: ").append(actividad.getLugar()).append("\n");
+                    actividadesStr.append("Descripción: ").append(actividad.getDescripcion()).append("\n");
+                    actividadesStr.append("-----------------------------\n");
+                }
             }
         }
+        System.out.println(actividadesStr);
+        return actividadesStr.toString();
     }
     
     // Getters y setters

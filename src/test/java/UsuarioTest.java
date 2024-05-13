@@ -168,7 +168,29 @@ public class UsuarioTest {
         assertTrue(printedOutput.contains("Mensaje 3"));
     }
     
-    
+    @Test
+    void testImprimirMensajesVacios() {
+        // Crear un usuario de prueba
+        Usuario usuario = new Usuario("Nombre Apellido", "correo@example.com", "+123456789", "password", "1234567890123456121213");
+
+        // Crear una lista de mensajes de prueba
+        List<String> mensajes = new ArrayList<>();
+        
+        // Establecer los mensajes en el usuario
+        usuario.setMensajes(mensajes);
+
+        // Redirigir la salida estándar a un ByteArrayOutputStream
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        // Llamar al método imprimirMensajes
+        usuario.imprimirMensajes();
+
+        // Verificar que la salida contiene los mensajes de prueba
+        String printedOutput = outContent.toString();
+        assertTrue(printedOutput.contains("No hay mensajes para imprimir"));
+
+    }
 
     
 

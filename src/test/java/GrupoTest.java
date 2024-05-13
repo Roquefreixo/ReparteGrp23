@@ -2,11 +2,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -194,6 +197,10 @@ class GrupoTest {
         // Verificar los nuevos valores con los getters
         assertEquals("Nuevo Nombre de Grupo", grupo.getNombre());
         assertEquals("nueva_foto.jpg", grupo.getFotoPerfil());
+        
+        Grupo grupo1 = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, null);
+
+        assertEquals(0,grupo1.getParticipantes().size());
     }
     
     @Test
@@ -223,7 +230,7 @@ class GrupoTest {
         Map<Usuario, Double> montos = grupo.getMontos();
         
         
-        assertEquals(monto, montos.get(usuarioQueHaPagado));
+        assertEquals(monto/2, montos.get(usuarioQueHaPagado));
         
         
     }
@@ -367,13 +374,14 @@ class GrupoTest {
         
         // Verificar que el monto del gasto se ha repartido correctamente entre los participantes del grupo
         Map<Usuario, Double> montos = grupo.getMontos();
-        double montoEsperadoPorUsuario = 100 / participantes.size();
-        for (Usuario participante : participantes) {
-            assertEquals(montoEsperadoPorUsuario, montos.get(participante));
-        }
+        double montoEsperadoPorUsuario = 100 / 2;
+        //para el usuario 1 que ha pagado +50 y para el 2 que esta en deuda -50
+        assertEquals(montoEsperadoPorUsuario, grupo.getMontos().get(usuario1));
+        assertEquals(-montoEsperadoPorUsuario, grupo.getMontos().get(usuario2));
+        
     }
     
-    @Test
+    /*@Test
     void testCalcularTransaccionesMinimas() {
         // Crear un mock de Grupo
         Grupo grupoMock = mock(Grupo.class);
@@ -403,7 +411,34 @@ class GrupoTest {
         assertNotNull(gastos);
         assertEquals(1, gastos.size());
         
+        }*/
+    
+    @Test
+    public void testAceptacion() {
+    	Usuario usuarioEva = new Usuario ("Eva", "eva@example.com", "+123456789", "contraseña123", "1234567890123456789012");
+    	Usuario usuarioLuis = new Usuario ("Luis", "luis@example.com", "+987654321", "contraseña456", "9876543210123456789012");
+    	Usuario usuarioMarta = new Usuario ("Marta", "marta@example.com", "+111111111", "contraseña789", "1111111110123456789012");
+    	Usuario usuarioJuan = new Usuario ("Juan", "juan@example.com", "+222222222", "contraseñaabc", "2222222220123456789012");
+        
+        List<Usuario> participantes= new ArrayList<>();
+        participantes.add(usuarioEva);
+        participantes.add(usuarioLuis);
+        participantes.add(usuarioMarta);
+        participantes.add(usuarioJuan);
+        
+        Grupo g1 = new Grupo("Los mejores", "foto.jpg", usuarioEva, participantes);
+        g1.añadirGasto(g1, usuarioEva, participantes, 11.30, "Descripción del gasto", new Date(), "Actividad");
+        g1.añadirGasto(g1, usuarioEva, participantes, 23.15, "Descripción del gasto", new Date(), "Actividad");
+        g1.añadirGasto(g1, usuarioEva, participantes, 2.05, "Descripción del gasto", new Date(), "Actividad");
+        g1.añadirGasto(g1, usuarioLuis, participantes, 12.00, "Descripción del gasto", new Date(), "Actividad");
+        g1.añadirGasto(g1, usuarioLuis, participantes, 17.49, "Descripción del gasto", new Date(), "Actividad");
+        g1.añadirGasto(g1, usuarioMarta, participantes, 20.22, "Descripción del gasto", new Date(), "Actividad");
+        g1.añadirGasto(g1, usuarioMarta, participantes, 5.75, "Descripción del gasto", new Date(), "Actividad");
+        for (Usuario user: participantes) {
+        	user.imprimirMensajes();
         }
+    }
+    
     
     
     
@@ -664,6 +699,47 @@ class GrupoTest {
         
         assertFalse(grupo.añadirActividad("Canoa",mifecha, 5,misitio, "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
     
+        
+    }
+    
+    
+    //prueba visualizar
+    @Test
+    public void testVisualizarCalendarioVacio() {
+    	Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        String resultadoEsperado = "No hay actividades en el calendario.";
+        assertEquals(resultadoEsperado, grupo.visualizarActividades());
+   
+    }
+    
+    
+    @Test
+    public void testVisualizarCalendarioLLeno() {
+    	Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
+        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
+        List<Usuario> participantes = new ArrayList<>();
+        participantes.add(usuario1);
+        participantes.add(usuario2);
+        
+        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario1, participantes);
+        
+        grupo.añadirActividad("Actividad 1", new Date(1), 10, "Esto es asi", "el rio");
+        // Esperamos un resultado que contiene los detalles de las actividades
+        String resultadoEsperado = "Actividades en el calendario:\n" +
+                                   "Nombre: Actividad 1\n" +
+                                   "Fecha de inicio: 01-01-1970\n" +
+                                   "Duración: 10.0 horas\n" +
+                                   "Lugar: Esto es asi\n" +
+                                   "Descripción: el rio\n" +
+                                   "-----------------------------\n";
+        assertEquals(resultadoEsperado, grupo.visualizarActividades());
         
     }
 }
