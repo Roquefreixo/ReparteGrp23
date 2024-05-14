@@ -40,6 +40,8 @@ class GrupoTest {
 		        List<Usuario> participantes = new ArrayList<>();
 		        participantes.add(usuario1);
 		        participantes.add(usuario2);
+				participantes.add(liderGrupo);
+
 		        
 		        Grupo grupo = new Grupo(nombre, fotoPerfil, liderGrupo, participantes);
 
