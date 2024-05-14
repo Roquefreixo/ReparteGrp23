@@ -96,6 +96,55 @@ class GrupoTest {
 		        participantes.add(usuario2);
 		        assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
 		    }
+
+			@Test
+		    public void testCrearGrupo_Valido_participantesNoVacia_LiderDentro() {
+		        // Caso de prueba 1: Crear un grupo con valores válidos
+		        String nombre = "Grupo de Prueba";
+		        String fotoPerfil = "foto.jpg";
+		        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
+
+		        Usuario usuario1 = mock(Usuario.class);
+		        Usuario usuario2 = mock(Usuario.class);
+		        List<Usuario> participantes = new ArrayList<>();
+		        participantes.add(usuario1);
+		        participantes.add(usuario2);
+				participantes.add(liderGrupo);
+		        
+		        Grupo grupo = new Grupo(nombre, fotoPerfil, liderGrupo, participantes);
+
+		        // Verificar que los atributos se inicializan correctamente
+		        assertEquals(nombre, grupo.getNombre());
+		        assertEquals(fotoPerfil, grupo.getFotoPerfil());
+		        assertEquals(liderGrupo, grupo.getLiderGrupo());
+				assertTrue(grupo.getParticipantes().contains(liderGrupo));
+		        
+		        
+		        
+		    }
+
+			@Test
+		    public void testCrearGrupo_Valido_participantesNoVacia_LiderNoDentro() {
+		        // Caso de prueba 1: Crear un grupo con valores válidos
+		        String nombre = "Grupo de Prueba";
+		        String fotoPerfil = "foto.jpg";
+		        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
+
+		        Usuario usuario1 = mock(Usuario.class);
+		        Usuario usuario2 = mock(Usuario.class);
+		        List<Usuario> participantes = new ArrayList<>();
+		        participantes.add(usuario1);
+		        participantes.add(usuario2);
+
+				// Verificar que los atributos se inicializan correctamente
+		        assertEquals(nombre, grupo.getNombre());
+		        assertEquals(fotoPerfil, grupo.getFotoPerfil());
+		        assertEquals(liderGrupo, grupo.getLiderGrupo());
+				assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
+		        
+		        
+		        
+		    }
 		    
 		    @Test
 		    void testSettersAndGettersGrupo() {
