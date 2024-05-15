@@ -1,3 +1,4 @@
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
@@ -9,7 +10,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -99,35 +99,11 @@ class GrupoTest {
 		        assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
 		    }
 
-			@Test
-		    public void testCrearGrupo_Valido_participantesNoVacia_LiderDentro() {
-		        // Caso de prueba 1: Crear un grupo con valores válidos
-		        String nombre = "Grupo de Prueba";
-		        String fotoPerfil = "foto.jpg";
-		        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
-
-		        Usuario usuario1 = mock(Usuario.class);
-		        Usuario usuario2 = mock(Usuario.class);
-		        List<Usuario> participantes = new ArrayList<>();
-		        participantes.add(usuario1);
-		        participantes.add(usuario2);
-				participantes.add(liderGrupo);
-		        
-		        Grupo grupo = new Grupo(nombre, fotoPerfil, liderGrupo, participantes);
-
-		        // Verificar que los atributos se inicializan correctamente
-		        assertEquals(nombre, grupo.getNombre());
-		        assertEquals(fotoPerfil, grupo.getFotoPerfil());
-		        assertEquals(liderGrupo, grupo.getLiderGrupo());
-				assertTrue(grupo.getParticipantes().contains(liderGrupo));
-		        
-		        
-		        
-		    }
+			
 
 			@Test
 		    public void testCrearGrupo_Valido_participantesNoVacia_LiderNoDentro() {
-		        // Caso de prueba 1: Crear un grupo con valores válidos
+		        
 		        String nombre = "Grupo de Prueba";
 		        String fotoPerfil = "foto.jpg";
 		        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
@@ -137,16 +113,29 @@ class GrupoTest {
 		        List<Usuario> participantes = new ArrayList<>();
 		        participantes.add(usuario1);
 		        participantes.add(usuario2);
-
-				// Verificar que los atributos se inicializan correctamente
-		        assertEquals(nombre, grupo.getNombre());
-		        assertEquals(fotoPerfil, grupo.getFotoPerfil());
-		        assertEquals(liderGrupo, grupo.getLiderGrupo());
-				assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
-		        
+		       
+				Exception exceptionNo = assertThrows(IllegalArgumentException.class, () -> { new Grupo(nombre, fotoPerfil, liderGrupo, participantes);});
+				assertEquals("El lider del grupo tiene que ser un participante", exceptionNo.getMessage());
 		        
 		        
 		    }
+			
+			@Test 
+			public void testCrearGrupo_ParticipantesVacia() {
+				String nombre = "Grupo de Prueba";
+		        String fotoPerfil = "foto.jpg";
+		        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
+
+		        Usuario usuario1 = mock(Usuario.class);
+		        Usuario usuario2 = mock(Usuario.class);
+		        List<Usuario> participantes = new ArrayList<>();
+		        participantes.add(usuario1);
+		        participantes.add(usuario2);
+		       
+				Grupo grupo = new Grupo(nombre, fotoPerfil, liderGrupo, null);
+				assertEquals(1,grupo.getParticipantes().size()); //Ver que se metio el lider
+		        
+			}
 		    
 		    @Test
 		    void testSettersAndGettersGrupo() {
@@ -155,7 +144,7 @@ class GrupoTest {
 		        List<Usuario> participantes = new ArrayList<>();
 		        participantes.add(new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1234567890123456121213"));
 		        participantes.add(new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "1234567890123456121213"));
-
+		        participantes.add(liderGrupo);
 		        // Crear objeto Grupo
 		        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
 
@@ -175,9 +164,7 @@ class GrupoTest {
 		        assertEquals("Nuevo Nombre de Grupo", grupo.getNombre());
 		        assertEquals("nueva_foto.jpg", grupo.getFotoPerfil());
 		        
-		        Grupo grupo1 = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, null);
-
-		        assertEquals(0,grupo1.getParticipantes().size());
+		        
 		    }
 		}
 		
@@ -189,6 +176,7 @@ class GrupoTest {
 		        usuario2 = new Usuario("María López", "maria@example.com", "+987654321", "password123", "1234567890123456121213");
 		        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "1234567890123456121213");
 		        List<Usuario> participantes = new ArrayList<>();
+		        participantes.add(liderGrupo);
 		        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 
 		    	
@@ -204,6 +192,7 @@ class GrupoTest {
 		        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456121213");
 		        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "1234567890123456121213");
 		        List<Usuario> participantes = new ArrayList<>();
+		        participantes.add(liderGrupo);
 		        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 
 		    	
@@ -220,6 +209,7 @@ class GrupoTest {
 		        usuario1 = new Usuario("Juan Pérez", "juan@example.com", "+123456789", "password", "1234567890123456121213");
 		        liderGrupo = new Usuario("Líder Grupo", "lider@example.com", "+111111111", "leaderpass", "1234567890123456121213");
 		        List<Usuario> participantes = new ArrayList<>();
+		        participantes.add(liderGrupo);
 		        grupo = new Grupo("Grupo de Ejemplo", "foto.png", liderGrupo, participantes);
 		        grupo.addUserGrp(usuario1);
 		        grupo.addUserGrp(liderGrupo);
@@ -282,9 +272,11 @@ class GrupoTest {
 		        montosNoCero.put(mock(Usuario.class), 0.0);
 		        montosNoCero.put(mock(Usuario.class), 50.0);
 		        montosNoCero.put(mock(Usuario.class), 0.0);
-
+		        ArrayList<Usuario> participantes=new ArrayList<>();
+		        Usuario usuario=mock(Usuario.class);
+		        participantes.add(usuario);
 		        // Instanciar el objeto Grupo y probar el método todosLosMontosSonCero con ambos mapas
-		        Grupo grupo = new Grupo("Nombre", "FotoPerfil", mock(Usuario.class), new ArrayList<>());
+		        Grupo grupo = new Grupo("Nombre", "FotoPerfil", usuario, participantes);
 		        assertTrue(grupo.todosLosMontosSonCero(montosCero));
 		        assertFalse(grupo.todosLosMontosSonCero(montosNoCero));
 		    }
@@ -525,7 +517,8 @@ class GrupoTest {
 		        
 		    }
 		    
-		   
+		    
+		    
 		    
 		    @Test
 		    public void testAñadirActividadConNombreNulo() {
@@ -738,6 +731,63 @@ class GrupoTest {
 		        assertFalse(grupo.añadirActividad("Canoa",mifecha, 5,misitio, "En un mundo donde la tecnología avanza a pasos agigantados, es crucial adaptarse rápidamente para mantenerse competitivo y rlevante en el mercado actu"));
 		    
 		        
+		    }
+		    
+		    @Nested
+		    class constructorActividad {
+		    	@Test
+			    public void testConstructor_ValoresNulos() {
+			        // Intentamos crear una actividad con valores nulos
+			    	Exception exception = assertThrows(IllegalArgumentException.class, () -> {new Actividad(null, new Date(1), 1.5f, "Lugar", "Descripción");});
+			        assertEquals("Ningún parámetro puede ser nulo.", exception.getMessage());
+			        
+			        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> {new Actividad("Nombre", null, 1.5f, "Lugar", "Descripción");});
+			        assertEquals("Ningún parámetro puede ser nulo.", exception2.getMessage());
+			        Exception exception3 = assertThrows(IllegalArgumentException.class, () -> {new Actividad("Nombre", new Date(1), 1.5f, null, "Descripción");});
+			        assertEquals("Ningún parámetro puede ser nulo.", exception3.getMessage());
+			        Exception exception4 = assertThrows(IllegalArgumentException.class, () -> {new Actividad("Nombre", new Date(1), 1.5f, "Lugar", null);});
+			        assertEquals("Ningún parámetro puede ser nulo.", exception4.getMessage());
+			    }
+			    @Test
+			    public void testConstructor() {
+			        // Caso de prueba: Crear una actividad con valores válidos
+			        String nombreActividad = "Visita Museo";
+			        Date fechaInicio = new Date();
+			        float duracion = 1.5f;
+			        String lugar = "Museo del Prado";
+			        String descripcion = "Visita guiada al museo del Prado";
+
+			        Actividad actividad = new Actividad(nombreActividad, fechaInicio, duracion, lugar, descripcion);
+
+			        // Verificar que los atributos se establecen correctamente
+			        assertEquals(nombreActividad, actividad.getNombreActividad());
+			        assertEquals(fechaInicio, actividad.getFechaInicio());
+			        assertEquals(duracion, actividad.getDuracion(), 0.001); // Margen de error de 0.001
+			        assertEquals(lugar, actividad.getLugar());
+			        assertEquals(descripcion, actividad.getDescripcion());
+			    }
+			    
+			    @Test
+			    public void testGettersAndSettersActividad() {
+			        // Crear una actividad de ejemplo
+			        Actividad actividad = new Actividad("Visita Museo", new Date(1), 1.5f, "Museo del Prado", "Visita guiada al museo del Prado");
+
+			        // Modificar los atributos usando setters
+			        actividad.setNombreActividad("Visita Ayuntamiento");
+			        Date nuevaFecha = new Date(2);
+			        actividad.setFechaInicio(nuevaFecha);
+			        actividad.setDuracion(2.0f);
+			        actividad.setLugar("Madrid");
+			        actividad.setDescripcion("Visita al ayuntamiento de Madrid");
+
+			        // Verificar que los cambios se reflejen correctamente usando los getters
+			        assertEquals("Visita Ayuntamiento", actividad.getNombreActividad());
+			        assertEquals(nuevaFecha, actividad.getFechaInicio());
+			        assertEquals(2.0f, actividad.getDuracion(), 0.001); // Margen de error de 0.001
+			        assertEquals("Madrid", actividad.getLugar());
+			        assertEquals("Visita al ayuntamiento de Madrid", actividad.getDescripcion());
+
+			    }
 		    }
 		}
 		

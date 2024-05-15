@@ -16,7 +16,10 @@ class GastosTest {
 		@Test
 	    public void testCalcularHaberesDeberes() {
 	        // Preparación de datos de prueba
-	        Grupo grupo = new Grupo("NombreGrupo", "foto.jpg", new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213"), new ArrayList<>());
+			Usuario lider = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
+			ArrayList<Usuario> lista = new ArrayList<>();
+			lista.add(lider);
+	        Grupo grupo = new Grupo("NombreGrupo", "foto.jpg", lider, lista);
 	        Usuario usuarioQueHaPagado = new Usuario("Usuario1", "usuario1@example.com", "+987654321", "password", "1234567890123456121213");
 	        List<Usuario> listaDeUsuariosPagadores = new ArrayList<>();
 	        listaDeUsuariosPagadores.add(new Usuario("Usuario2", "usuario2@example.com", "+111111111", "password", "1234567890123456121213"));

@@ -27,22 +27,24 @@ public class Grupo {
         this.fotoPerfil = fotoPerfil;
         this.liderGrupo = liderGrupo;
         if(participantes!=null) {
+        	if(!participantes.contains(liderGrupo)){
+                throw new IllegalArgumentException("El lider del grupo tiene que ser un participante");
+              }
         	this.participantes = participantes;
         }else {
         	this.participantes = new ArrayList<>();
             this.participantes.add(liderGrupo);
         }
-
-        if(participantes.contains(liderGrupo)){
-            throw new IllegalArgumentException("El lider del grupo tiene que ser un participante");
-          }  
+        
+        
+          
         
         this.montos = new HashMap<>();
         this.transaccion=new HashMap<>();
         // Inicializar montos para cada participante con 0
 
         if(this.participantes.size()>0) {
-	      for (Usuario participante : participantes) {
+	      for (Usuario participante : this.participantes) {
 	         this.montos.put(participante, 0.0);
 	      }
         }
