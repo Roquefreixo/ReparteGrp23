@@ -35,10 +35,7 @@ public class Grupo {
         	this.participantes = new ArrayList<>();
             this.participantes.add(liderGrupo);
         }
-        
-        
-          
-        
+
         this.montos = new HashMap<>();
         this.transaccion=new HashMap<>();
         // Inicializar montos para cada participante con 0

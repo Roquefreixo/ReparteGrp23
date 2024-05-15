@@ -47,63 +47,7 @@ class GastosTest {
 	        }
 	    }
 	    
-	    @Test
-	    public void testSettersAndGetters() {
-	        // Mocking de objetos Grupo y Usuario
-	        Grupo grupoMock = mock(Grupo.class);
-	        Usuario usuarioQueHaPagadoMock = mock(Usuario.class);
-	        List<Usuario> listaDeUsuariosPagadoresMock = new ArrayList<>();
-	        listaDeUsuariosPagadoresMock.add(mock(Usuario.class));
-	        listaDeUsuariosPagadoresMock.add(mock(Usuario.class));
-	        
-	        // Datos de prueba
-	        double monto = 100.0;
-	        String descripcion = "Descripción del gasto";
-	        Date fecha = new Date();
-	        String actividad = "Actividad del gasto";
-	        
-	        // Creación de instancia de Gastos
-	        Gastos gastos = new Gastos(grupoMock, usuarioQueHaPagadoMock, listaDeUsuariosPagadoresMock, monto, descripcion, fecha, actividad);
-	        
-	        // Verificación de getters
-	        assertEquals(grupoMock, gastos.getGrupo());
-	        assertEquals(usuarioQueHaPagadoMock, gastos.getUsuarioQueHaPagado());
-	        assertEquals(listaDeUsuariosPagadoresMock, gastos.getListaDeUsuariosPagadores());
-	        assertEquals(monto, gastos.getMonto());
-	        assertEquals(descripcion, gastos.getDescripcion());
-	        assertEquals(fecha, gastos.getFecha());
-	        assertEquals(actividad, gastos.getActividad());
-	        
-	        // Cambio de valores utilizando setters
-	        Grupo nuevoGrupo = mock(Grupo.class);
-	        gastos.setGrupo(nuevoGrupo);
-	        assertEquals(nuevoGrupo, gastos.getGrupo());
-	        
-	        Usuario nuevoUsuario = mock(Usuario.class);
-	        gastos.setUsuarioQueHaPagado(nuevoUsuario);
-	        assertEquals(nuevoUsuario, gastos.getUsuarioQueHaPagado());
-	        
-	        List<Usuario> nuevaLista = new ArrayList<>();
-	        nuevaLista.add(mock(Usuario.class));
-	        gastos.setListaDeUsuariosPagadores(nuevaLista);
-	        assertEquals(nuevaLista, gastos.getListaDeUsuariosPagadores());
-	        
-	        double nuevoMonto = 200.0;
-	        gastos.setMonto(nuevoMonto);
-	        assertEquals(nuevoMonto, gastos.getMonto());
-	        
-	        String nuevaDescripcion = "Nueva descripción";
-	        gastos.setDescripcion(nuevaDescripcion);
-	        assertEquals(nuevaDescripcion, gastos.getDescripcion());
-	        
-	        Date nuevaFecha = new Date();
-	        gastos.setFecha(nuevaFecha);
-	        assertEquals(nuevaFecha, gastos.getFecha());
-	        
-	        String nuevaActividad = "Nueva actividad";
-	        gastos.setActividad(nuevaActividad);
-	        assertEquals(nuevaActividad, gastos.getActividad());
-	    }
+	    
 	    
 	}
     

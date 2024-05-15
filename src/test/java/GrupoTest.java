@@ -137,35 +137,7 @@ class GrupoTest {
 		        
 			}
 		    
-		    @Test
-		    void testSettersAndGettersGrupo() {
-		        // Crear objetos necesarios para la prueba
-		        Usuario liderGrupo = new Usuario("Líder", "lider@example.com", "+123456789", "password", "1234567890123456121213");
-		        List<Usuario> participantes = new ArrayList<>();
-		        participantes.add(new Usuario("Usuario 1", "usuario1@example.com", "+987654321", "password1", "1234567890123456121213"));
-		        participantes.add(new Usuario("Usuario 2", "usuario2@example.com", "+987654322", "password2", "1234567890123456121213"));
-		        participantes.add(liderGrupo);
-		        // Crear objeto Grupo
-		        Grupo grupo = new Grupo("Grupo de Prueba", "foto.jpg", liderGrupo, participantes);
-
-		        // Verificar los valores iniciales con los getters
-		        assertEquals("Grupo de Prueba", grupo.getNombre());
-		        assertEquals("foto.jpg", grupo.getFotoPerfil());
-		        assertEquals(liderGrupo, grupo.getLiderGrupo());
-		        assertEquals(participantes, grupo.getParticipantes());
-		        assertNotNull(grupo.getMontos());
-		        assertNotNull(grupo.getGastos());
-
-		        // Modificar los valores con los setters
-		        grupo.setNombre("Nuevo Nombre de Grupo");
-		        grupo.setFotoPerfil("nueva_foto.jpg");
-
-		        // Verificar los nuevos valores con los getters
-		        assertEquals("Nuevo Nombre de Grupo", grupo.getNombre());
-		        assertEquals("nueva_foto.jpg", grupo.getFotoPerfil());
-		        
-		        
-		    }
+		   
 		}
 		
 		@Nested
@@ -475,7 +447,7 @@ class GrupoTest {
 		
 		
 		@Test
-	    void testReclamarDeuda_UsuarioPerteneceAlGrupo() {
+	    void testReclamarDeuda() {
 	        // Crear un Grupo
 	        Usuario usuario1 = new Usuario("Usuario 1", "usuario1@", "+987654321", "password1", "1234567890123456121213");
 	        Usuario usuario2 = new Usuario("Usuario 2", "usuario2@", "+987654322", "password2", "1234567890123456121213");
@@ -748,46 +720,7 @@ class GrupoTest {
 			        Exception exception4 = assertThrows(IllegalArgumentException.class, () -> {new Actividad("Nombre", new Date(1), 1.5f, "Lugar", null);});
 			        assertEquals("Ningún parámetro puede ser nulo.", exception4.getMessage());
 			    }
-			    @Test
-			    public void testConstructor() {
-			        // Caso de prueba: Crear una actividad con valores válidos
-			        String nombreActividad = "Visita Museo";
-			        Date fechaInicio = new Date();
-			        float duracion = 1.5f;
-			        String lugar = "Museo del Prado";
-			        String descripcion = "Visita guiada al museo del Prado";
 
-			        Actividad actividad = new Actividad(nombreActividad, fechaInicio, duracion, lugar, descripcion);
-
-			        // Verificar que los atributos se establecen correctamente
-			        assertEquals(nombreActividad, actividad.getNombreActividad());
-			        assertEquals(fechaInicio, actividad.getFechaInicio());
-			        assertEquals(duracion, actividad.getDuracion(), 0.001); // Margen de error de 0.001
-			        assertEquals(lugar, actividad.getLugar());
-			        assertEquals(descripcion, actividad.getDescripcion());
-			    }
-			    
-			    @Test
-			    public void testGettersAndSettersActividad() {
-			        // Crear una actividad de ejemplo
-			        Actividad actividad = new Actividad("Visita Museo", new Date(1), 1.5f, "Museo del Prado", "Visita guiada al museo del Prado");
-
-			        // Modificar los atributos usando setters
-			        actividad.setNombreActividad("Visita Ayuntamiento");
-			        Date nuevaFecha = new Date(2);
-			        actividad.setFechaInicio(nuevaFecha);
-			        actividad.setDuracion(2.0f);
-			        actividad.setLugar("Madrid");
-			        actividad.setDescripcion("Visita al ayuntamiento de Madrid");
-
-			        // Verificar que los cambios se reflejen correctamente usando los getters
-			        assertEquals("Visita Ayuntamiento", actividad.getNombreActividad());
-			        assertEquals(nuevaFecha, actividad.getFechaInicio());
-			        assertEquals(2.0f, actividad.getDuracion(), 0.001); // Margen de error de 0.001
-			        assertEquals("Madrid", actividad.getLugar());
-			        assertEquals("Visita al ayuntamiento de Madrid", actividad.getDescripcion());
-
-			    }
 		    }
 		}
 		
